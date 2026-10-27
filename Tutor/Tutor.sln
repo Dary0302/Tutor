@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tutor.Infrastructure", "Tut
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tutor.Tests", "Tutor.Tests\Tutor.Tests.csproj", "{5FC7A570-FA96-47F8-8007-D75A4E7F1CEC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{192BC37E-394B-4E09-A3A1-2D6BE2E34057}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Common", "..\Core\Core.Common\Core.Common.csproj", "{5CF5F619-2EED-42C7-846D-48BB9F19B026}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +40,8 @@ Global
 		{5FC7A570-FA96-47F8-8007-D75A4E7F1CEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FC7A570-FA96-47F8-8007-D75A4E7F1CEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FC7A570-FA96-47F8-8007-D75A4E7F1CEC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5CF5F619-2EED-42C7-846D-48BB9F19B026} = {192BC37E-394B-4E09-A3A1-2D6BE2E34057}
 	EndGlobalSection
 EndGlobal
