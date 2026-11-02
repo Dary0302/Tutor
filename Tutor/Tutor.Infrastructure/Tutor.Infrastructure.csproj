@@ -7,13 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Dapper" Version="2.1.79" />
         <PackageReference Include="FluentMigrator" Version="8.0.1" />
-        <PackageReference Include="Npgsql" Version="10.0.3" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
     </ItemGroup>
     
     <ItemGroup>
       <ProjectReference Include="..\..\Core\Core.Common\Core.Common.csproj" />
+      <ProjectReference Include="..\Tutor.Domain\Tutor.Domain.csproj" />
     </ItemGroup>
 
 </Project>

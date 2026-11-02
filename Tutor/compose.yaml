@@ -1,20 +1,18 @@
 ﻿services:
-  productservice.api:
-    image: productservice.api
+  tutor.api:
+    image: tutor.api
     build:
       context: ..
-      dockerfile: ProductService/ProductService.Api/Dockerfile
+      dockerfile: Tutor/Tutor.Api/Dockerfile
     ports:
       - "5003:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
-      - Kafka__BootstrapServers=${KAFKA_BOOTSTRAP_SERVERS:-localhost:29092}
+      - Jwt__SigningKey=${JWT_SIGNING_KEY:?Set JWT_SIGNING_KEY to a random secret of at least 32 bytes}
     depends_on:
       db:
         condition: service_healthy
-    networks:
-      - product-network
 
   db:
     image: postgres:16
@@ -31,12 +29,6 @@
       interval: 5s
       timeout: 5s
       retries: 5
-    networks:
-      - product-network
-
-networks:
-  product-network:
-    driver: bridge
 
 volumes:
   postgres_data:
