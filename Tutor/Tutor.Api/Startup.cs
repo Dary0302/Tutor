@@ -2,6 +2,7 @@ using Core.Common.Extensions;
 using Core.Common.Extensions.Validation;
 using Core.Common.HttpLogic;
 using Tutor.Application.Configurations;
+using Tutor.Authentication;
 using Tutor.Infrastructure.Configurations;
 using Tutor.Validators;
 
@@ -18,6 +19,7 @@ public class Startup(IConfiguration configuration)
             .AddExceptionHandler<ExceptionHandler>()
             .AddProblemDetails()
             .AddOpenApi("Tutor", typeof(ApplicationConfiguration))
+            .AddAuthentication(configuration)
             .AddValidation<IValidationMarker>()
             .AddControllers();
     }
@@ -28,6 +30,8 @@ public class Startup(IConfiguration configuration)
             .UseExceptionHandler()
             .UseRouting()
             .UseCorsPolicy()
+            .UseAuthentication()
+            .UseAuthorization()
             .UseOpenApi()
             .UseEndpoints(endpoints =>
                 {
