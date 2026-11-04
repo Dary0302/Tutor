@@ -8,7 +8,7 @@ public sealed class LoginRequestValidator : AbstractValidator<LoginRequest>
 {
     public LoginRequestValidator()
     {
-        RuleFor(request => request.Email).NotEmpty().Length(3, 100);
+        RuleFor(request => request.Email).NotEmpty().Length(3, 255);
         RuleFor(request => request.Password).NotEmpty().Length(3, 100);
     }
 }
