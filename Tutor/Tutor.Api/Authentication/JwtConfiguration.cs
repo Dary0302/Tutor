@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -8,6 +9,8 @@ namespace Tutor.Authentication;
 
 internal static class JwtConfiguration
 {
+    private const string InvalidUserIdMessage = "Некорректный идентификатор пользователя.";
+
     public static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         var secret = configuration["Jwt:SigningKey"];
@@ -25,15 +28,21 @@ internal static class JwtConfiguration
             ValidateLifetime = true,
             ValidAlgorithms = [SecurityAlgorithms.HmacSha256],
             ClockSkew = TimeSpan.Zero,
-            NameClaimType = "email",
-            RoleClaimType = "role"
+            NameClaimType = ClaimTypes.Email,
+            RoleClaimType = ClaimTypes.Role
         };
         services.AddSingleton<IAccessTokenIssuer>(new JwtAccessTokenIssuer(parameters));
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.MapInboundClaims = false;
+                options.MapInboundClaims = true;
                 options.TokenValidationParameters = parameters;
+                options.Events.OnTokenValidated = context =>
+                {
+                    if (!Guid.TryParse(context.Principal?.FindFirstValue(ClaimTypes.NameIdentifier), out _))
+                        context.Fail(InvalidUserIdMessage);
+                    return Task.CompletedTask;
+                };
             });
         services.AddAuthorization();
         services.ConfigureSwaggerGen(options =>

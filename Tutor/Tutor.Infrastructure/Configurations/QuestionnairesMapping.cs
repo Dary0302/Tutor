@@ -48,10 +48,10 @@ internal static class QuestionnairesMapping
         entity.ToTable("questionnaire_skills");
         entity.HasKey(x => new { x.SkillId, x.QuestionnaireId });
         entity.Property(x => x.SkillId).HasColumnName("skill_id");
-        entity.HasOne<Skill>().WithMany().HasForeignKey(x => x.SkillId)
+        entity.HasOne(x => x.Skill).WithMany().HasForeignKey(x => x.SkillId)
             .OnDelete(DeleteBehavior.Restrict);
         entity.Property(x => x.QuestionnaireId).HasColumnName("questionnaires_id");
-        entity.HasOne<Questionnaire>().WithMany().HasForeignKey(x => x.QuestionnaireId)
+        entity.HasOne<Questionnaire>().WithMany(q => q.Skills).HasForeignKey(x => x.QuestionnaireId)
             .OnDelete(DeleteBehavior.Cascade);
         entity.Property(x => x.SkillLevel).HasColumnName("skill_level").HasConversion<string>().HasMaxLength(50);
     }
@@ -66,7 +66,7 @@ internal static class QuestionnairesMapping
         entity.Property(x => x.YearsExperience).HasColumnName("years_experience");
         entity.Property(x => x.MaxStudents).HasColumnName("max_students");
         entity.Property(x => x.TeacherQuestionnaireId).HasColumnName("teacher_questionnaire_id").ValueGeneratedNever();
-        entity.HasOne<Questionnaire>().WithOne().HasForeignKey<TeacherInfo>(x => x.TeacherQuestionnaireId)
+        entity.HasOne<Questionnaire>().WithOne(q => q.TeacherInfo).HasForeignKey<TeacherInfo>(x => x.TeacherQuestionnaireId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 
@@ -76,7 +76,7 @@ internal static class QuestionnairesMapping
         entity.ToTable("accessibility");
         entity.Property(x => x.Id).HasColumnName("id").ValueGeneratedNever();
         entity.Property(x => x.QuestionnaireId).HasColumnName("questionnaire_id");
-        entity.HasOne<Questionnaire>().WithMany().HasForeignKey(x => x.QuestionnaireId)
+        entity.HasOne<Questionnaire>().WithMany(q => q.Availability).HasForeignKey(x => x.QuestionnaireId)
             .OnDelete(DeleteBehavior.Cascade);
         entity.Property(x => x.DayOfWeek).HasColumnName("day_of_week").HasConversion<string>().HasMaxLength(50);
         entity.Property(x => x.StartTime).HasColumnName("start_time");

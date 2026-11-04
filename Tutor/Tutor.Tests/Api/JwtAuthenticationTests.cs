@@ -51,7 +51,7 @@ public sealed class JwtAuthenticationTests
 
         Assert.That(result.Succeeded, Is.True);
         var principal = result.Principal!;
-        Assert.That(principal.FindFirstValue(JwtRegisteredClaimNames.Sub), Is.EqualTo(user.Id.ToString()));
+        Assert.That(principal.FindFirstValue(ClaimTypes.NameIdentifier), Is.EqualTo(user.Id.ToString()));
         Assert.That(principal.Identity!.Name, Is.EqualTo(user.Email));
         Assert.That(principal.IsInRole(role.ToString()), Is.True);
     }
@@ -63,7 +63,8 @@ public sealed class JwtAuthenticationTests
     public async Task RejectsInvalidBearerToken(string issuer, string audience, int minutesUntilExpiry, bool trustedKey)
     {
         var key = trustedKey ? signingKey : Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
-        var token = new JwtSecurityToken(issuer, audience, expires: DateTime.UtcNow.AddMinutes(minutesUntilExpiry),
+        var token = new JwtSecurityToken(issuer, audience, [new Claim(JwtRegisteredClaimNames.Sub, Guid.NewGuid().ToString())],
+            expires: DateTime.UtcNow.AddMinutes(minutesUntilExpiry),
             signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
                 SecurityAlgorithms.HmacSha256));
 
