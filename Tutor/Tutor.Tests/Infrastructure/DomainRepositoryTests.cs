@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Npgsql;
 using NUnit.Framework;
+using Tutor.Application.Configurations;
+using Tutor.Application.Questionnaires;
 using Tutor.Domain.Articles;
 using Tutor.Domain.Billing;
 using Tutor.Domain.Mentorship;
@@ -41,7 +43,7 @@ public sealed class DomainRepositoryTests
             {
                 ["ConnectionStrings:DefaultConnection"] = testConnection.ConnectionString
             }))
-            .ConfigureServices((context, services) => services.AddInfrastructureServices(context.Configuration))
+            .ConfigureServices((context, services) => services.AddInfrastructureServices(context.Configuration).AddApplicationServices())
             .Build();
         host.RunMigrations<MigrationMarker>();
     }
@@ -172,6 +174,44 @@ public sealed class DomainRepositoryTests
         Assert.That(stored.Id, Is.EqualTo(article.Id));
         Assert.That(stored.Title, Is.EqualTo(article.Title));
         Assert.That(stored.S3Key, Is.EqualTo(article.S3Key));
+    }
+
+    [Test]
+    public async Task ConcurrentFormSavesReuseCatalogSkillsAndReplaceOnlyTheOwnersAnswers()
+    {
+        var service = scope!.ServiceProvider.GetRequiredService<IQuestionnaireService>();
+        var mentor = await CreateUser(UserRole.Mentor);
+        var student = await CreateUser(UserRole.Student);
+        var skillName = $"Нейросети-{Guid.NewGuid():N}";
+        var slot = new TimeWindowDto { DayOfWeek = DayOfWeek.Friday, StartTime = new(10, 0), EndTime = new(12, 0) };
+        var teacher = new MentorInfoDto { PlaceOfWork = "Школа", Position = "Наставник", YearsExperience = 3, MaxStudents = 2 };
+
+        QuestionnaireFormDto Form(string name, MentorInfoDto? info = null) => new()
+        {
+            FirstName = "Ирина", LastName = "Ли", City = "Пермь", Education = "Вуз", GoalDescription = "Изучить ML",
+            Skills = [new() { Name = name }], Availability = [slot], TeacherInfo = info
+        };
+
+        var results = await Task.WhenAll(
+            service.SaveAsync(mentor, UserRole.Mentor, Form(skillName, teacher), default),
+            service.SaveAsync(student, UserRole.Student, Form(skillName.ToLowerInvariant()), default),
+            service.SaveAsync(mentor, UserRole.Mentor, Form(skillName, teacher), default));
+        Assert.That(results.All(r => r.IsSuccess), Is.True);
+        var original = (await Repository<Questionnaire>().ListAsync(q => q.UserId == mentor)).Single();
+        Assert.That((await Repository<Skill>().ListAsync()).Count(s => string.Equals(s.Name, skillName, StringComparison.OrdinalIgnoreCase)), Is.EqualTo(1));
+
+        var edit = Form("Другой навык", teacher);
+        edit.Availability.Clear();
+        Assert.That((await service.SaveAsync(mentor, UserRole.Mentor, edit, default)).IsSuccess, Is.True);
+        Assert.That((await Repository<Questionnaire>().ListAsync(q => q.UserId == mentor)).Single().Id, Is.EqualTo(original.Id));
+        var saved = (await service.GetAsync(mentor, default)).Value;
+        Assert.That(saved.Availability, Is.Empty);
+        Assert.That(saved.Skills.Single().Name, Is.EqualTo("Другой навык"));
+        Assert.That(saved.TeacherInfo?.MaxStudents, Is.EqualTo(2));
+        var other = (await service.GetAsync(student, default)).Value;
+        Assert.That(other.Skills.Single().Name, Is.EqualTo(skillName).IgnoreCase);
+        Assert.That(other.Availability.Single().StartTime, Is.EqualTo(slot.StartTime));
+        Assert.That(other.TeacherInfo, Is.Null);
     }
 
     private IRepository<TEntity, Guid> Repository<TEntity>() where TEntity : class =>

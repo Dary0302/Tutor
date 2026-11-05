@@ -16,7 +16,7 @@ internal sealed class JwtAccessTokenIssuer(TokenValidationParameters parameters)
             claims: [
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(parameters.RoleClaimType, user.Role.ToString()),
+                new Claim("role", user.Role.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             ],
             expires: DateTime.UtcNow.AddHours(2),
