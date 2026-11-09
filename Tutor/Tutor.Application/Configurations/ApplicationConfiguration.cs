@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Tutor.Application.Article;
 using Tutor.Application.Auth;
+using Tutor.Application.Questionnaires;
 
 namespace Tutor.Application.Configurations;
 
@@ -8,8 +9,9 @@ public static class ApplicationConfiguration
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddScoped<AuthService>();
-        services.AddScoped<ArticleService>();
-        return services;
+        return services.AddScoped<AuthService>()
+            .AddScoped<ArticleService>()
+            .AddScoped<IQuestionnaireService, QuestionnaireService>()
+            .AddAutoMapper(_ => { }, typeof(QuestionnaireProfile));
     }
 }

@@ -3,12 +3,13 @@ using System.Security.Principal;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tutor.Application.Article;
+using Tutor.Domain.Articles;
 
 namespace Tutor.Controllers.Articles;
 
 [ApiController]
 [Route("api/articles")]
-public sealed class ArticleController(ArticleService service): ControllerBase
+public sealed class ArticleController(ArticleService service): TutorControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<ArticleDetailDto>> GetAllTitles(
@@ -32,7 +33,7 @@ public sealed class ArticleController(ArticleService service): ControllerBase
     public async Task<ActionResult<ArticleDetailDto>> Create(
         [FromBody] CreateArticleRequest request, CancellationToken cancellationToken)
     {
-        var authorId = User.FindMyUserId();
+        var authorId = GetIdAuthorizedUser();
         
         if (authorId == null)
         {
@@ -40,7 +41,7 @@ public sealed class ArticleController(ArticleService service): ControllerBase
         }
 
         var newArticle = await service.CreateArticle(request.Title, 
-                                                                request.Content, authorId.Value, cancellationToken);
+                                                                request.Content, authorId, cancellationToken);
         return Reply(StatusCodes.Status201Created, "created", newArticle);
     }
     

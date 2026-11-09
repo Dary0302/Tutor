@@ -1,4 +1,5 @@
 using Tutor.Application.Article;
+using Tutor.Domain.Articles;
 
 namespace Tutor.Controllers.Articles;
 

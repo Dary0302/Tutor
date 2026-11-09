@@ -1,17 +1,19 @@
 using System.ComponentModel.DataAnnotations;
+using Core.Common.Errors;
+using FluentResults;
 using Tutor.Domain.Articles;
 
 namespace Tutor.Application.Article;
 
-public class ArticleService(IArticleRepository articles, IArticleStorage storage)
+public class ArticleService(IArticleRepository articles, IS3Repository storage): IArticleService
 {
     public async Task<ArticleDetailDto> CreateArticle(string title, string content, Guid authorId,
         CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(title))
-            throw new ValidationException("Title is required");
+            Result.Fail(AppError.UnprocessableContent("Пустой заголовок"));
         if (string.IsNullOrWhiteSpace(content))
-            throw new ValidationException("Content is required");
+            Result.Fail(AppError.UnprocessableContent("Пустая статья"));
 
         var articleId = Guid.NewGuid();
         

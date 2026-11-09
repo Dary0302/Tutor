@@ -3,6 +3,7 @@ using Amazon.S3;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Tutor.Application.Questionnaires;
 using Tutor.Domain.Billing;
 using Tutor.Domain.Articles;
 using Tutor.Domain.Mentorship;
@@ -40,8 +41,9 @@ public static class InfrastructureConfiguration
         });
         
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IQuestionnaireRepository, QuestionnaireRepository>();
         services.AddScoped<IArticleRepository, ArticleRepository>();
-        services.AddScoped<IArticleStorage, ArticleStorage>();
+        services.AddScoped<IS3Repository, S3Repository>();
 
         services.AddGuidRepository<Skill>();
         services.AddGuidRepository<Questionnaire>();

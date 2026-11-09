@@ -15,6 +15,8 @@ public sealed class LoginRequestValidator : AbstractValidator<LoginRequest>
 
 public sealed class RegisterRequestValidator : AbstractValidator<RegisterRequest>
 {
+    private const string PasswordTooLongMessage = "Password must fit within the 72-byte bcrypt limit.";
+
     public RegisterRequestValidator()
     {
         Include(new LoginRequestValidator());
@@ -22,7 +24,7 @@ public sealed class RegisterRequestValidator : AbstractValidator<RegisterRequest
         RuleFor(request => request.Role).IsInEnum();
         RuleFor(request => request.Password)
             .Must(password => password is null || Encoding.UTF8.GetByteCount(password) <= 72)
-            .WithMessage("Password must fit within the 72-byte bcrypt limit.");
+            .WithMessage(PasswordTooLongMessage);
     }
 }
 

@@ -12,5 +12,8 @@ public sealed class Questionnaire
     public int MonthsNumberMin { get; set; }
     public int MonthsNumberMax { get; set; }
     public int HoursNumberWeek { get; set; }
+    public List<QuestionnaireSkill> Skills { get; } = [];
+    public List<AvailabilitySlot> Availability { get; } = [];
+    public TeacherInfo? TeacherInfo { get; set; }
     public required Guid UserId { get; set; }
 }

@@ -6,7 +6,7 @@ namespace Tutor.Infrastructure.Articles;
 
 internal sealed class ArticleRepository(TutorDbContext db): IArticleRepository
 {
-    private IArticleRepository _articleRepositoryImplementation;
+    private IArticleRepository articleRepositoryImplementation;
     public  Task<Article?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return db.Articles.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id, cancellationToken);

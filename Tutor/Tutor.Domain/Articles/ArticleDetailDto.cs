@@ -1,4 +1,4 @@
-namespace Tutor.Application.Article;
+namespace Tutor.Domain.Articles;
 
 public record ArticleDetailDto(
     Guid Id,
