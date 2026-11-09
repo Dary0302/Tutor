@@ -9,7 +9,7 @@ namespace Tutor.Controllers.Articles;
 
 [ApiController]
 [Route("api/articles")]
-public sealed class ArticleController(ArticleService service): TutorControllerBase
+public sealed class ArticleController(IArticleService service): TutorControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<ArticleDetailDto>> GetAllTitles(
