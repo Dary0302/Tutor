@@ -29,14 +29,14 @@ public class ArticleService(IArticleRepository articles, IS3Repository storage):
         
         await articles.TryCreateAsync(article, cancellationToken);
         
-        return new ArticleDetailDto(articleId, null, null, null, s3Key);
+        return new ArticleDetailDto(articleId, title, content, authorId, s3Key);
     }
     
     public async Task<bool> UpdateAsync(
         Guid id, string? content, CancellationToken cancellationToken)
     {
         var article = await articles.GetByIdAsync(id, cancellationToken);
-        if (article is null) return false;
+        if (article is null) Result.Fail(AppError.NotFound("Статья не найдена"));
         
         if (content is not null)
         {
@@ -49,7 +49,7 @@ public class ArticleService(IArticleRepository articles, IS3Repository storage):
     public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         var article = await articles.GetByIdAsync(id, cancellationToken);
-        if (article is null) return false;
+        if (article is null) Result.Fail(AppError.NotFound("Статья не найдена"));
 
         await storage.DeleteAsync(article.S3Key, cancellationToken); 
         await articles.TryDeleteAsync(article, cancellationToken);
@@ -64,7 +64,7 @@ public class ArticleService(IArticleRepository articles, IS3Repository storage):
         var totalCount = listArticles.Count;
         var start = (pageNumber - 1) * pageSize;
         if (start > totalCount || start <= 0) 
-            return null;
+            Result.Fail(AppError.UnprocessableContent());
 
         int end;
         if (start + pageSize > totalCount)
@@ -86,7 +86,7 @@ public class ArticleService(IArticleRepository articles, IS3Repository storage):
         var article = await articles.GetByIdAsync(id, cancellationToken);
 
         if (article == null)
-            return null;
+            Result.Fail(AppError.NotFound("Статья не найдена"));;
 
         var contentUrl = storage.GetPreSignedUrl(article.S3Key);
 
