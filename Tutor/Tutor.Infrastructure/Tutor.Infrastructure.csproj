@@ -7,6 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Amazon.S3" Version="0.35.1" />
+        <PackageReference Include="AWSSDK.S3" Version="4.0.104.9" />
         <PackageReference Include="FluentMigrator" Version="8.0.1" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
     </ItemGroup>

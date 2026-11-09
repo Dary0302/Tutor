@@ -1,3 +1,5 @@
+using Amazon.Runtime;
+using Amazon.S3;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +10,7 @@ using Tutor.Domain.Mentorship;
 using Tutor.Domain.Questionnaires;
 using Tutor.Domain.Repositories;
 using Tutor.Domain.Users;
+using Tutor.Infrastructure.Articles;
 using Tutor.Infrastructure.Repositories;
 using Tutor.Infrastructure.Users;
 
@@ -21,8 +24,26 @@ public static class InfrastructureConfiguration
                                ?? throw new NullReferenceException("No database connection string found.");
 
         services.AddDbContextFactory<TutorDbContext>(options => options.UseNpgsql(connectionString));
+       
+        services.AddSingleton<IAmazonS3>(sp =>
+        {
+            var config = new AmazonS3Config
+            {
+                ServiceURL = "https://s3.yandexcloud.net",
+                AuthenticationRegion = "ru-central1",
+                ForcePathStyle = true
+            };
+            
+            var credentials = new BasicAWSCredentials("accessKey", "secretKey");
+            
+            return new AmazonS3Client(credentials, config); 
+            
+        });
+        
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IQuestionnaireRepository, QuestionnaireRepository>();
+        services.AddScoped<IArticleRepository, ArticleRepository>();
+        services.AddScoped<IS3Repository, S3Repository>();
 
         services.AddGuidRepository<Skill>();
         services.AddGuidRepository<Questionnaire>();

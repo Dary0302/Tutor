@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Tutor.Domain.Users;
+using Tutor.Domain.Articles;
 using Tutor.Infrastructure.Configurations;
 
 namespace Tutor.Infrastructure;
@@ -9,6 +10,7 @@ internal sealed class TutorDbContext(DbContextOptions<TutorDbContext> options) :
     internal const string EmailIndex = "users_email_unique";
 
     public DbSet<User> Users => Set<User>();
+    public DbSet<Article> Articles => Set<Article>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
