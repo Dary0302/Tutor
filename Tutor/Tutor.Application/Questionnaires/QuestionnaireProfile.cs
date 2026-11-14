@@ -22,6 +22,7 @@ public sealed class QuestionnaireProfile : Profile
             .ForMember(x => x.QuestionnaireId, o => o.Ignore())
             .ReverseMap();
         CreateMap<MentorInfoDto, TeacherInfo>()
+            .ForMember(x => x.Rating, o => o.Ignore())
             .ForMember(x => x.TeacherQuestionnaireId, o => o.Ignore())
             .ReverseMap();
     }

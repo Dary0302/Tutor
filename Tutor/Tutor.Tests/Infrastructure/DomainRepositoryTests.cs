@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Npgsql;
 using NUnit.Framework;
 using Tutor.Application.Configurations;
+using Tutor.Application.Mentors;
 using Tutor.Application.Questionnaires;
 using Tutor.Domain.Articles;
 using Tutor.Domain.Billing;
@@ -43,7 +44,8 @@ public sealed class DomainRepositoryTests
             {
                 ["ConnectionStrings:DefaultConnection"] = testConnection.ConnectionString
             }))
-            .ConfigureServices((context, services) => services.AddInfrastructureServices(context.Configuration).AddApplicationServices())
+            .ConfigureServices((context, services) => services.AddInfrastructureServices(context.Configuration)
+                .AddApplicationServices())
             .Build();
         host.RunMigrations<MigrationMarker>();
     }
@@ -216,6 +218,90 @@ public sealed class DomainRepositoryTests
 
     private IRepository<TEntity, Guid> Repository<TEntity>() where TEntity : class =>
         scope!.ServiceProvider.GetRequiredService<IRepository<TEntity, Guid>>();
+
+    [Test]
+    public async Task MentorSearchFiltersAndRanksBeforePagingAndCountsOnlyActivePairs()
+    {
+        var search = scope!.ServiceProvider.GetRequiredService<IMentorSearchService>();
+        var workplace = $"Поиск%_{Guid.NewGuid():N}";
+        var python = new Skill { Name = $"Python-{Guid.NewGuid():N}" };
+        var sql = new Skill { Name = $"SQL-{Guid.NewGuid():N}" };
+        await Repository<Skill>().AddAsync(python);
+        await Repository<Skill>().AddAsync(sql);
+        var caller = await CreateUser(UserRole.Student);
+        var preferences = SearchQuestionnaire(caller);
+        preferences.Skills.Add(new QuestionnaireSkill { QuestionnaireId = preferences.Id, SkillId = python.Id });
+        await Repository<Questionnaire>().AddAsync(preferences);
+
+        var mentorIds = new List<Guid>();
+        for (var i = 0; i < 12; i++)
+        {
+            var mentor = SearchQuestionnaire(await CreateUser(UserRole.Mentor));
+            mentor.TeacherInfo = new TeacherInfo
+            {
+                TeacherQuestionnaireId = mentor.Id, PlaceOfWork = workplace, Position = "Наставник",
+                YearsExperience = 5, MaxStudents = 2, Rating = 4.5m
+            };
+            mentor.Skills.AddRange([
+                new QuestionnaireSkill { QuestionnaireId = mentor.Id, SkillId = python.Id },
+                new QuestionnaireSkill { QuestionnaireId = mentor.Id, SkillId = sql.Id }
+            ]);
+            mentor.Availability.Add(new AvailabilitySlot
+            {
+                QuestionnaireId = mentor.Id, DayOfWeek = DayOfWeek.Monday,
+                StartTime = new(10, 0), EndTime = new(12, 0)
+            });
+            // This mentor is the only fully compatible match; ranking must happen before LIMIT.
+            mentor.HoursNumberWeek = i == 11 ? 2 : 1.5m;
+            await Repository<Questionnaire>().AddAsync(mentor);
+            mentorIds.Add(mentor.UserId);
+        }
+
+        foreach (var status in new[] { PairStatus.Active, PairStatus.Completed, PairStatus.Terminated })
+        {
+            var request = new MentorshipRequest
+            {
+                TeacherId = mentorIds[11], StudentId = caller, StudentLetter = "Обучение", Status = RequestStatus.Accepted
+            };
+            await Repository<MentorshipRequest>().AddAsync(request);
+            await Repository<MentorshipPair>().AddAsync(new MentorshipPair { RequestId = request.Id, Status = status });
+        }
+
+        MentorSearchRequest Filters(int page) => new()
+        {
+            SkillIds = [python.Id, sql.Id, python.Id], DurationMonths = [1, 3], DaysOfWeek = [DayOfWeek.Monday],
+            MinYearsExperience = 5, MaxYearsExperience = 5, MinHoursPerWeek = 1.5m, MaxHoursPerWeek = 2,
+            PlaceOfWork = workplace.ToLowerInvariant(), MinRating = 4.5m, HasAvailablePlaces = true, Page = page, PageSize = 7
+        };
+        var first = (await search.SearchAsync(caller, Filters(1), default)).Value;
+        var second = (await search.SearchAsync(caller, Filters(2), default)).Value;
+        Assert.That(first.TotalCount, Is.EqualTo(12));
+        Assert.That(first.PageSize, Is.EqualTo(7));
+        Assert.That(first.TotalPages, Is.EqualTo(2));
+        Assert.That(first.Items, Has.Count.EqualTo(7));
+        Assert.That(second.Items, Has.Count.EqualTo(5));
+        Assert.That(first.Items.Select(x => x.UserId).Intersect(second.Items.Select(x => x.UserId)), Is.Empty);
+        Assert.That(first.Items[0].UserId, Is.EqualTo(mentorIds[11]));
+        Assert.That(first.Items[0].Compatibility, Is.EqualTo(100));
+        Assert.That(first.Items[0].AvailablePlaces, Is.EqualTo(1));
+        Assert.That(first.Items[0].Skills, Has.Count.EqualTo(2));
+        Assert.That((await search.SearchAsync(caller, Filters(3), default)).Value.Items, Is.Empty);
+
+        var noMatches = (await search.SearchAsync(caller, new MentorSearchRequest
+        {
+            PlaceOfWork = workplace, SkillIds = [python.Id, Guid.NewGuid()]
+        }, default)).Value;
+        Assert.That(noMatches.TotalCount, Is.Zero);
+        var noProfile = (await search.SearchAsync(await CreateUser(UserRole.Tutor), Filters(1), default)).Value;
+        Assert.That(noProfile.Items.All(x => x.Compatibility is null), Is.True);
+    }
+
+    private static Questionnaire SearchQuestionnaire(Guid userId) => new()
+    {
+        UserId = userId, FirstName = "Ирина", LastName = "Ли", City = "Пермь", Education = "Вуз",
+        GoalDescription = "Учиться", MonthsNumberMin = 1, MonthsNumberMax = 3,
+        HoursNumberWeek = 2, CommunicationFormat = CommunicationFormat.Online
+    };
 
     private async Task<Guid> CreateUser(UserRole role)
     {

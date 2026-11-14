@@ -11,7 +11,7 @@ public sealed class Questionnaire
     public CommunicationFormat CommunicationFormat { get; set; }
     public int MonthsNumberMin { get; set; }
     public int MonthsNumberMax { get; set; }
-    public int HoursNumberWeek { get; set; }
+    public decimal HoursNumberWeek { get; set; }
     public List<QuestionnaireSkill> Skills { get; } = [];
     public List<AvailabilitySlot> Availability { get; } = [];
     public TeacherInfo? TeacherInfo { get; set; }

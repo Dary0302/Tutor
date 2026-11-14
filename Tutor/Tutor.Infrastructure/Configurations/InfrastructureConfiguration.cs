@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tutor.Application.Questionnaires;
+using Tutor.Application.Mentors;
 using Tutor.Domain.Billing;
 using Tutor.Domain.Articles;
 using Tutor.Domain.Mentorship;
@@ -23,6 +24,7 @@ public static class InfrastructureConfiguration
         services.AddDbContextFactory<TutorDbContext>(options => options.UseNpgsql(connectionString));
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IQuestionnaireRepository, QuestionnaireRepository>();
+        services.AddScoped<IMentorSearchRepository, MentorSearchRepository>();
 
         services.AddGuidRepository<Skill>();
         services.AddGuidRepository<Questionnaire>();

@@ -14,7 +14,7 @@ public sealed class QuestionnaireFormDto
     public CommunicationFormat CommunicationFormat { get; init; } = CommunicationFormat.Online;
     public int MonthsNumberMin { get; init; } = 6;
     public int MonthsNumberMax { get; init; } = 6;
-    public int HoursNumberWeek { get; init; } = 2;
+    public decimal HoursNumberWeek { get; init; } = 2;
     public required List<FormSkillDto> Skills { get; init; }
     public List<TimeWindowDto> Availability { get; init; } = [];
     public MentorInfoDto? TeacherInfo { get; init; }

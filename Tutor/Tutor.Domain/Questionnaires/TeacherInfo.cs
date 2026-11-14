@@ -7,4 +7,5 @@ public sealed class TeacherInfo
     public required string Position { get; set; }
     public int YearsExperience { get; set; }
     public int MaxStudents { get; set; }
+    public decimal? Rating { get; set; }
 }
