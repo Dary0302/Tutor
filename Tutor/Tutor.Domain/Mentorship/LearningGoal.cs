@@ -1,3 +1,5 @@
+using Tutor.Domain.Questionnaires;
+
 namespace Tutor.Domain.Mentorship;
 
 public sealed class LearningGoal
@@ -10,4 +12,7 @@ public sealed class LearningGoal
     public DateTimeOffset? ClosedAt { get; set; }
     public required Guid SkillId { get; set; }
     public required Guid PairId { get; set; }
+    public Skill Skill { get; set; } = null!;
+    public MentorshipPair Pair { get; set; } = null!;
+    public List<GoalTask> Tasks { get; } = [];
 }

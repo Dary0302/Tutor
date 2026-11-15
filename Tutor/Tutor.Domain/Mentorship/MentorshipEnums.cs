@@ -26,7 +26,8 @@ public enum GoalStatus
 {
     Active,
     Completed,
-    Cancelled
+    Cancelled,
+    PendingReview
 }
 
 public enum GoalTaskStatus

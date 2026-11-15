@@ -19,7 +19,7 @@ using Tutor.Infrastructure.Migrations;
 
 namespace Tutor.Tests.Infrastructure;
 
-public sealed class DomainRepositoryTests
+public sealed partial class DomainRepositoryTests
 {
     private readonly string database = $"tutor_test_{Guid.NewGuid():N}";
     private string? adminConnection;

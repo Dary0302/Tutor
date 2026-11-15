@@ -7,4 +7,5 @@ public sealed class GoalTask
     public GoalTaskStatus Status { get; set; }
     public DateTimeOffset? CompletedAt { get; set; }
     public required Guid GoalId { get; set; }
+    public int Position { get; set; }
 }

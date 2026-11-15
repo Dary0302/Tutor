@@ -9,4 +9,5 @@ public sealed class MentorshipPair
     public PairEndReason? EndReason { get; set; }
     public Guid? EndedByUserId { get; set; }
     public required Guid RequestId { get; set; }
+    public MentorshipRequest Request { get; set; } = null!;
 }
