@@ -1,0 +1,34 @@
+name: Quality gates
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      OPENAPI_SCHEMA_URL: ${{ vars.OPENAPI_SCHEMA_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm verify
+      - name: Compare real backend contract when configured
+        if: env.OPENAPI_SCHEMA_URL != ''
+        run: pnpm api:contract:check
+      - name: Report unconfigured backend check
+        if: env.OPENAPI_SCHEMA_URL == ''
+        run: echo 'OPENAPI_SCHEMA_URL is not set; remote backend parity was NOT checked.'
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: browser-failures
+          path: test-results/
+          if-no-files-found: ignore
