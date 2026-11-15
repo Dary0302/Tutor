@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tutor.Application.Questionnaires;
+using Tutor.Application.Mentors;
 using Tutor.Domain.Billing;
 using Tutor.Domain.Articles;
 using Tutor.Domain.Mentorship;
@@ -24,7 +25,7 @@ public static class InfrastructureConfiguration
                                ?? throw new NullReferenceException("No database connection string found.");
 
         services.AddDbContextFactory<TutorDbContext>(options => options.UseNpgsql(connectionString));
-       
+
         services.AddSingleton<IAmazonS3>(sp =>
         {
             var config = new AmazonS3Config
@@ -33,15 +34,16 @@ public static class InfrastructureConfiguration
                 AuthenticationRegion = "ru-central1",
                 ForcePathStyle = true
             };
-            
+
             var credentials = new BasicAWSCredentials("accessKey", "secretKey");
-            
-            return new AmazonS3Client(credentials, config); 
-            
+
+            return new AmazonS3Client(credentials, config);
+
         });
-        
+
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IQuestionnaireRepository, QuestionnaireRepository>();
+        services.AddScoped<IMentorSearchRepository, MentorSearchRepository>();
         services.AddScoped<IArticleRepository, ArticleRepository>();
         services.AddScoped<IS3Repository, S3Repository>();
 

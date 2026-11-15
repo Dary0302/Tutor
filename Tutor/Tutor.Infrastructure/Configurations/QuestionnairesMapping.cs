@@ -37,6 +37,7 @@ internal static class QuestionnairesMapping
         entity.Property(x => x.MonthsNumberMin).HasColumnName("months_number_min");
         entity.Property(x => x.MonthsNumberMax).HasColumnName("months_number_max");
         entity.Property(x => x.HoursNumberWeek).HasColumnName("hours_number_week");
+        entity.HasIndex(x => x.HoursNumberWeek).HasDatabaseName("ix_questionnaires_hours_number_week");
         entity.Property(x => x.UserId).HasColumnName("user_id");
         entity.HasOne<User>().WithOne().HasForeignKey<Questionnaire>(x => x.UserId)
             .OnDelete(DeleteBehavior.Restrict);
@@ -65,6 +66,9 @@ internal static class QuestionnairesMapping
         entity.Property(x => x.Position).HasColumnName("position").HasMaxLength(255);
         entity.Property(x => x.YearsExperience).HasColumnName("years_experience");
         entity.Property(x => x.MaxStudents).HasColumnName("max_students");
+        entity.Property(x => x.Rating).HasColumnName("rating").HasPrecision(3, 2);
+        entity.HasIndex(x => x.YearsExperience).HasDatabaseName("ix_teacher_info_years_experience");
+        entity.HasIndex(x => x.Rating).HasDatabaseName("ix_teacher_info_rating");
         entity.Property(x => x.TeacherQuestionnaireId).HasColumnName("teacher_questionnaire_id").ValueGeneratedNever();
         entity.HasOne<Questionnaire>().WithOne(q => q.TeacherInfo).HasForeignKey<TeacherInfo>(x => x.TeacherQuestionnaireId)
             .OnDelete(DeleteBehavior.Cascade);
@@ -81,5 +85,6 @@ internal static class QuestionnairesMapping
         entity.Property(x => x.DayOfWeek).HasColumnName("day_of_week").HasConversion<string>().HasMaxLength(50);
         entity.Property(x => x.StartTime).HasColumnName("start_time");
         entity.Property(x => x.EndTime).HasColumnName("end_time");
+        entity.HasIndex(x => new { x.QuestionnaireId, x.DayOfWeek }).HasDatabaseName("ix_accessibility_questionnaire_day");
     }
 }
