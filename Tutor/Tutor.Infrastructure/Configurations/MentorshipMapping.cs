@@ -47,7 +47,7 @@ internal static class MentorshipMapping
         entity.HasOne<User>().WithMany().HasForeignKey(x => x.EndedByUserId)
             .OnDelete(DeleteBehavior.Restrict);
         entity.Property(x => x.RequestId).HasColumnName("request_id");
-        entity.HasOne<MentorshipRequest>().WithOne().HasForeignKey<MentorshipPair>(x => x.RequestId)
+        entity.HasOne(x => x.Request).WithOne().HasForeignKey<MentorshipPair>(x => x.RequestId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 
@@ -62,10 +62,10 @@ internal static class MentorshipMapping
         entity.Property(x => x.CreatedAt).HasColumnName("created_at");
         entity.Property(x => x.ClosedAt).HasColumnName("closed_at");
         entity.Property(x => x.SkillId).HasColumnName("skill_id");
-        entity.HasOne<Skill>().WithMany().HasForeignKey(x => x.SkillId)
+        entity.HasOne(x => x.Skill).WithMany().HasForeignKey(x => x.SkillId)
             .OnDelete(DeleteBehavior.Restrict);
         entity.Property(x => x.PairId).HasColumnName("pair_id");
-        entity.HasOne<MentorshipPair>().WithMany().HasForeignKey(x => x.PairId)
+        entity.HasOne(x => x.Pair).WithMany().HasForeignKey(x => x.PairId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 
@@ -77,8 +77,9 @@ internal static class MentorshipMapping
         entity.Property(x => x.Name).HasColumnName("name").HasMaxLength(255);
         entity.Property(x => x.Status).HasColumnName("status").HasConversion<string>().HasMaxLength(50);
         entity.Property(x => x.CompletedAt).HasColumnName("completed_at");
+        entity.Property(x => x.Position).HasColumnName("position");
         entity.Property(x => x.GoalId).HasColumnName("goal_id");
-        entity.HasOne<LearningGoal>().WithMany().HasForeignKey(x => x.GoalId)
+        entity.HasOne<LearningGoal>().WithMany(x => x.Tasks).HasForeignKey(x => x.GoalId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 
