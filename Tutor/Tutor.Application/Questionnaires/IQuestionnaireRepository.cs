@@ -1,3 +1,5 @@
+using Tutor.Domain.Questionnaires;
+
 namespace Tutor.Application.Questionnaires;
 
 public interface IQuestionnaireRepository

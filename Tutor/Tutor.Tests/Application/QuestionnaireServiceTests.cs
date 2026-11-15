@@ -1,6 +1,7 @@
 using Core.Common.Errors;
 using NUnit.Framework;
 using Tutor.Application.Questionnaires;
+using Tutor.Domain.Questionnaires;
 using Tutor.Domain.Users;
 
 namespace Tutor.Tests.Application;
