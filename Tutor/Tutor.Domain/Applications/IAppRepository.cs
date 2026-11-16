@@ -8,4 +8,6 @@ public interface IAppRepository
     Task<App?> GetAppById(Guid id, CancellationToken cancellationToken);
     Task<List<App>> GetAllUnprocessedApps(CancellationToken cancellationToken);
     Task TutorPlaceApprove(App app, bool statusApprove, CancellationToken cancellationToken);
+    Task<bool> TryDeleteAsync(App app, CancellationToken cancellationToken);
+    Task<List<App>> GetAppByStudent(Guid studentId, CancellationToken cancellationToken);
 }

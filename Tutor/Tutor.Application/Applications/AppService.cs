@@ -8,8 +8,6 @@ namespace Tutor.Application.Applications;
 
 public class AppService(IAppRepository repository, IQuestionnaireRepository questionnaireRepository): IAppService
 {
-    private IAppService _appServiceImplementation;
-
     public async Task<AppDetailDto> CreateApplication(Guid studentId, Guid mentorId, CancellationToken cancellationToken)
     {
         var newApplication = new App
@@ -44,7 +42,7 @@ public class AppService(IAppRepository repository, IQuestionnaireRepository ques
     public async Task MentorPlaceApprove(Guid id, bool statusApprove, CancellationToken cancellationToken)
     {
         var app = await repository.GetAppById(id, cancellationToken);
-        if (app is null) Result.Fail(AppError.NotFound("Заявка не найдена не найдена"));
+        if (app is null) Result.Fail(AppError.NotFound("Заявка не найдена"));
         
         await repository.MentorPlaceApprove(app, statusApprove, cancellationToken);
     }
@@ -70,8 +68,31 @@ public class AppService(IAppRepository repository, IQuestionnaireRepository ques
     public async Task TutorPlaceApprove(Guid id, bool statusApprove, CancellationToken cancellationToken)
     {
         var app = await repository.GetAppById(id, cancellationToken);
-        if (app is null) Result.Fail(AppError.NotFound("Заявка не найдена не найдена"));
+        if (app is null) Result.Fail(AppError.NotFound("Заявка не найдена"));
         
         await repository.TutorPlaceApprove(app, statusApprove, cancellationToken);
+    }
+
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var app = await repository.GetAppById(id, cancellationToken);
+        if (app is null) Result.Fail(AppError.NotFound("Заявка не найдена"));
+        
+        await repository.TryDeleteAsync(app, cancellationToken);
+    }
+
+    public async Task<List<AppListDto>> GetStudentsApplication(Guid studentId, CancellationToken cancellationToken)
+    {
+        var listApplications = await repository.GetAppByStudent(studentId, cancellationToken);
+
+        List<AppListDto> result = [];
+
+        foreach (var application in listApplications)
+        {
+            var newQuestionnaire = await questionnaireRepository.GetAsync(application.MentorId, cancellationToken);
+            result.Add(new AppListDto(application.Id, newQuestionnaire));
+        }
+        
+        return result;
     }
 }

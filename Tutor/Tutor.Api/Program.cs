@@ -16,10 +16,8 @@ var host = Host
 
 var migratedHost = host.RunMigrations<MigrationMarker>();
 
-// 2. Создаете Scope и передаете провайдер сервисов внутрь метода
 using (var scope = migratedHost.Services.CreateScope())
 {
-    // Вот здесь вызывается ваш статический класс
     await DbInitializer.SeedAsync(scope.ServiceProvider); 
 }
 

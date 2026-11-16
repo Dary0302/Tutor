@@ -17,7 +17,29 @@ public sealed class ApplicationsController(IAppService service): TutorController
         var studentId = GetIdAuthorizedUser();
 
         var newApplication = await service.CreateApplication(studentId, mentorId, cancellationToken);
-        return newApplication;
+        return Reply(StatusCodes.Status201Created, "created", newApplication);
+    }
+
+    [HttpDelete]
+    [Authorize(Roles = "Student")]
+    public async Task<ActionResult<AppDetailDto>> Delete([FromQuery] Guid id, CancellationToken cancellationToken)
+    {
+        await service.DeleteAsync(id, cancellationToken);
+        return Reply(StatusCodes.Status204NoContent, "Deleted");
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "Student")]
+    public async Task<ActionResult<List<AppListDto>>> Get(CancellationToken cancellationToken)
+    {
+        var studentId = GetIdAuthorizedUser();
+
+        var result = await service.GetStudentsApplication(studentId, cancellationToken);
+        if (result.Count == 0)
+        {
+            return NotFound();
+        }
+        return Reply(StatusCodes.Status200OK, "", null, result);
     }
 
     [HttpGet("mentor/get")]
@@ -31,15 +53,15 @@ public sealed class ApplicationsController(IAppService service): TutorController
         {
             return NotFound();
         }
-        return result;
+        return Reply(StatusCodes.Status200OK, "", null, result);
     }
 
     [HttpPut("mentor/put")]
     [Authorize(Roles = "Mentor")]
-    public async Task<ActionResult<AppDetailDto>> MentorPlaceApprove(PlaceApproveRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult> MentorPlaceApprove(PlaceApproveRequest request, CancellationToken cancellationToken)
     {
         await service.MentorPlaceApprove(request.Id, request.StatusApprove, cancellationToken);
-        return new AppDetailDto(new Guid(), new Guid(), new Guid());
+        return Reply(StatusCodes.Status200OK, "Approved");
     }
     
     [HttpGet("tutor/get")]
@@ -51,14 +73,17 @@ public sealed class ApplicationsController(IAppService service): TutorController
         {
             return NotFound();
         }
-        return result;
+        return Reply(StatusCodes.Status200OK, "", null, null, result);
     }
 
     [HttpPut("tutor/put")]
     [Authorize(Roles = "Tutor")]
-    public async Task<ActionResult<AppDetailDto>> TutorPlaceApprove(PlaceApproveRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult> TutorPlaceApprove(PlaceApproveRequest request, CancellationToken cancellationToken)
     {
         await service.TutorPlaceApprove(request.Id, request.StatusApprove, cancellationToken);
-        return new AppDetailDto(new Guid(), new Guid(), new Guid());
+        return Reply(StatusCodes.Status200OK, "Approved");;
     }
+    
+    private ObjectResult Reply(int status, string message, AppDetailDto? appDetail = null, List<AppListDto>? listApp = null, List<AppListForTutorDto>? listForTutorApp = null) =>
+        StatusCode(status, new AppResponse(message, status, appDetail, listApp, listForTutorApp));
 }

@@ -5,7 +5,6 @@ namespace Tutor.Infrastructure.Application;
 
 internal sealed class AppRepository(TutorDbContext db): IAppRepository
 {
-    private IAppRepository _appRepositoryImplementation;
 
     public async Task<bool> TryCreateAsync(App app, CancellationToken cancellationToken)
     {
@@ -47,5 +46,25 @@ internal sealed class AppRepository(TutorDbContext db): IAppRepository
     {
         app.TutorsAproove =  statusApprove;
         await db.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<bool> TryDeleteAsync(App app, CancellationToken cancellationToken)
+    {
+        var entry = db.Applications.Remove(app);
+        try
+        {
+            await db.SaveChangesAsync(cancellationToken);
+            return true;
+        }
+        catch (DbUpdateException ex) 
+        {
+            entry.State = EntityState.Detached;
+            return false;
+        }
+    }
+
+    public async Task<List<App>> GetAppByStudent(Guid studentId, CancellationToken cancellationToken)
+    {
+        return await db.Applications.Where(a => a.StudentId == studentId).ToListAsync(cancellationToken);
     }
 }

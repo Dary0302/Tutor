@@ -9,4 +9,6 @@ public interface IAppService
     Task MentorPlaceApprove(Guid id, bool statusApprove, CancellationToken cancellationToken);
     Task<List<AppListForTutorDto>> GetAllUnprocessedApps(CancellationToken cancellationToken);
     Task TutorPlaceApprove(Guid id, bool statusApprove, CancellationToken cancellationToken);
+    Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+    Task<List<AppListDto>> GetStudentsApplication(Guid studentId, CancellationToken cancellationToken);
 }
