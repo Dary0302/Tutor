@@ -4,4 +4,5 @@ namespace Tutor.Domain.Applications;
 
 public record AppListDto(
     Guid Id,
-    QuestionnaireFormDto  QuestionnaireForm);
+    QuestionnaireFormDto  QuestionnaireForm,
+    string? reasonForRefusal);

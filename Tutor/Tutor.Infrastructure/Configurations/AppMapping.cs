@@ -14,5 +14,6 @@ internal static class AppMapping
         article.Property(x => x.MentorId).HasColumnName("mentor").ValueGeneratedNever();
         article.Property(x => x.MentorsAproove).HasColumnName("mentorsAproove");
         article.Property(x => x.TutorsAproove).HasColumnName("tutorsAproove");
+        article.Property(x => x.ReasonForRefusal).HasColumnName("reasonForRefusal");
     }
 }

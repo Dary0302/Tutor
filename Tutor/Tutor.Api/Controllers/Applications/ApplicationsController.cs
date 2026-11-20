@@ -44,11 +44,25 @@ public sealed class ApplicationsController(IAppService service): TutorController
 
     [HttpGet("mentor/get")]
     [Authorize(Roles = "Mentor")]
-    public async Task<ActionResult<List<AppListDto>>> GetMentorApplications(CancellationToken cancellationToken)
+    public async Task<ActionResult<List<AppListDto>>> GetNewMentorApplications(CancellationToken cancellationToken)
     {
         var mentorId = GetIdAuthorizedUser();
 
-        var result = await service.GetMentorsApplication(mentorId, cancellationToken);
+        var result = await service.GetNewMentorsApplication(mentorId, cancellationToken);
+        if (result.Count == 0)
+        {
+            return NotFound();
+        }
+        return Reply(StatusCodes.Status200OK, "", null, result);
+    }
+    
+    [HttpGet("mentor/old/get")]
+    [Authorize(Roles = "Mentor")]
+    public async Task<ActionResult<List<AppListDto>>> GetOldMentorApplications(CancellationToken cancellationToken)
+    {
+        var mentorId = GetIdAuthorizedUser();
+
+        var result = await service.GetOldMentorsApplication(mentorId, cancellationToken);
         if (result.Count == 0)
         {
             return NotFound();
@@ -60,7 +74,7 @@ public sealed class ApplicationsController(IAppService service): TutorController
     [Authorize(Roles = "Mentor")]
     public async Task<ActionResult> MentorPlaceApprove(PlaceApproveRequest request, CancellationToken cancellationToken)
     {
-        await service.MentorPlaceApprove(request.Id, request.StatusApprove, cancellationToken);
+        await service.MentorPlaceApprove(request.Id, request.StatusApprove, request.ReasonForRefusal, cancellationToken);
         return Reply(StatusCodes.Status200OK, "Approved");
     }
     
@@ -80,7 +94,7 @@ public sealed class ApplicationsController(IAppService service): TutorController
     [Authorize(Roles = "Tutor")]
     public async Task<ActionResult> TutorPlaceApprove(PlaceApproveRequest request, CancellationToken cancellationToken)
     {
-        await service.TutorPlaceApprove(request.Id, request.StatusApprove, cancellationToken);
+        await service.TutorPlaceApprove(request.Id, request.StatusApprove, request.ReasonForRefusal, cancellationToken);
         return Reply(StatusCodes.Status200OK, "Approved");;
     }
     

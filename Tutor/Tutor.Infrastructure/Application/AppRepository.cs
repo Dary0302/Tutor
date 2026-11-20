@@ -21,14 +21,19 @@ internal sealed class AppRepository(TutorDbContext db): IAppRepository
         }
     }
 
-    public async Task<List<App>> GetAppByMentor(Guid mentorId, CancellationToken cancellationToken)
+    public async Task<List<App>> GetNewAppByMentor(Guid mentorId, CancellationToken cancellationToken)
     {
         return await db.Applications.Where(a => a.MentorId == mentorId && a.MentorsAproove == null).ToListAsync(cancellationToken);
     }
+    public async Task<List<App>> GetOldAppByMentor(Guid mentorId, CancellationToken cancellationToken)
+    {
+        return await db.Applications.Where(a => a.MentorId == mentorId && a.MentorsAproove != null).ToListAsync(cancellationToken);
+    }
 
-    public async Task MentorPlaceApprove(App app, bool statusApprove, CancellationToken cancellationToken)
+    public async Task MentorPlaceApprove(App app, bool statusApprove, string? reasonForRefusal, CancellationToken cancellationToken)
     {
         app.MentorsAproove =  statusApprove;
+        app.ReasonForRefusal = reasonForRefusal;
         await db.SaveChangesAsync(cancellationToken);
     }
 
@@ -39,12 +44,13 @@ internal sealed class AppRepository(TutorDbContext db): IAppRepository
 
     public async Task<List<App>> GetAllUnprocessedApps(CancellationToken cancellationToken)
     {
-        return await db.Applications.Where(a => a.TutorsAproove == null).ToListAsync(cancellationToken);
+        return await db.Applications.Where(a => a.TutorsAproove == null && a.MentorsAproove == true).ToListAsync(cancellationToken);
     }
 
-    public async Task TutorPlaceApprove(App app, bool statusApprove, CancellationToken cancellationToken)
+    public async Task TutorPlaceApprove(App app, bool statusApprove, string? reasonForRefusal, CancellationToken cancellationToken)
     {
         app.TutorsAproove =  statusApprove;
+        app.ReasonForRefusal = reasonForRefusal;
         await db.SaveChangesAsync(cancellationToken);
     }
 

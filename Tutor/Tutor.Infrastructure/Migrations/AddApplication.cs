@@ -2,7 +2,7 @@ using FluentMigrator;
 
 namespace Tutor.Infrastructure.Migrations;
 
-[Migration(20261115000102, "Add Application")]
+[Migration(20261115000103, "Add Application")]
 public sealed class AddApplication: ForwardOnlyMigration
 {
     public override void Up()
@@ -13,7 +13,8 @@ public sealed class AddApplication: ForwardOnlyMigration
                     student uuid NOT NULL REFERENCES "Users"("Id") ON DELETE RESTRICT,
                     mentor uuid NOT NULL REFERENCES "Users"("Id") ON DELETE RESTRICT,
                     "mentorsAproove" boolean,
-                    "tutorsAproove" boolean);
+                    "tutorsAproove" boolean,
+                    "reasonForRefusal" varchar(255));
                     """);
     }
 }
