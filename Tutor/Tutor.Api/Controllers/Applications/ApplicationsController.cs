@@ -70,11 +70,19 @@ public sealed class ApplicationsController(IAppService service): TutorController
         return Reply(StatusCodes.Status200OK, "", null, result);
     }
 
-    [HttpPut("mentor/put")]
+    [HttpPut("mentor/consent")]
     [Authorize(Roles = "Mentor")]
-    public async Task<ActionResult> MentorPlaceApprove(PlaceApproveRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult> MentorPlaceConsent(Guid id, CancellationToken cancellationToken)
     {
-        await service.MentorPlaceApprove(request.Id, request.StatusApprove, request.ReasonForRefusal, cancellationToken);
+        await service.MentorPlaceApprove(id, true, null, cancellationToken);
+        return Reply(StatusCodes.Status200OK, "Approved");
+    }
+    
+    [HttpPut("mentor/refusal")]
+    [Authorize(Roles = "Mentor")]
+    public async Task<ActionResult> MentorPlaceRefusal(PlaceApproveRequest request, CancellationToken cancellationToken)
+    {
+        await service.MentorPlaceApprove(request.Id, false, request.ReasonForRefusal, cancellationToken);
         return Reply(StatusCodes.Status200OK, "Approved");
     }
     
@@ -90,11 +98,19 @@ public sealed class ApplicationsController(IAppService service): TutorController
         return Reply(StatusCodes.Status200OK, "", null, null, result);
     }
 
-    [HttpPut("tutor/put")]
+    [HttpPut("tutor/consent")]
     [Authorize(Roles = "Tutor")]
-    public async Task<ActionResult> TutorPlaceApprove(PlaceApproveRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult> TutorPlaceConsent(Guid id, CancellationToken cancellationToken)
     {
-        await service.TutorPlaceApprove(request.Id, request.StatusApprove, request.ReasonForRefusal, cancellationToken);
+        await service.TutorPlaceApprove(id, true, null, cancellationToken);
+        return Reply(StatusCodes.Status200OK, "Approved");;
+    }
+    
+    [HttpPut("tutor/refusal")]
+    [Authorize(Roles = "Tutor")]
+    public async Task<ActionResult> TutorPlaceRefusal(PlaceApproveRequest request, CancellationToken cancellationToken)
+    {
+        await service.TutorPlaceApprove(request.Id, false, request.ReasonForRefusal, cancellationToken);
         return Reply(StatusCodes.Status200OK, "Approved");;
     }
     

@@ -25,6 +25,7 @@ internal sealed class AppRepository(TutorDbContext db): IAppRepository
     {
         return await db.Applications.Where(a => a.MentorId == mentorId && a.MentorsAproove == null).ToListAsync(cancellationToken);
     }
+    
     public async Task<List<App>> GetOldAppByMentor(Guid mentorId, CancellationToken cancellationToken)
     {
         return await db.Applications.Where(a => a.MentorId == mentorId && a.MentorsAproove != null).ToListAsync(cancellationToken);
