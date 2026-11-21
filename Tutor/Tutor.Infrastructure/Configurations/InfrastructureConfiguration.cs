@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Tutor.Application.Questionnaires;
 using Tutor.Application.Mentors;
 using Tutor.Domain.Applications;
+using Tutor.Application.Goals;
 using Tutor.Domain.Billing;
 using Tutor.Domain.Articles;
 using Tutor.Domain.Mentorship;
@@ -49,6 +50,7 @@ public static class InfrastructureConfiguration
         services.AddScoped<IArticleRepository, ArticleRepository>();
         services.AddScoped<IS3Repository, S3Repository>();
         services.AddScoped<IAppRepository, AppRepository>();
+        services.AddScoped<IGoalRepository, GoalRepository>();
 
         services.AddGuidRepository<Skill>();
         services.AddGuidRepository<Questionnaire>();
