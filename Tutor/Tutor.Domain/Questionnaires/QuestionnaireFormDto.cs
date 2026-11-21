@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization;
-using Tutor.Domain.Questionnaires;
 
-namespace Tutor.Application.Questionnaires;
+namespace Tutor.Domain.Questionnaires;
 
 public sealed class QuestionnaireFormDto
 {

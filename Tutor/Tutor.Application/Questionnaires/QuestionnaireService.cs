@@ -1,5 +1,6 @@
 using Core.Common.Errors;
 using FluentResults;
+using Tutor.Domain.Questionnaires;
 using Tutor.Domain.Users;
 
 namespace Tutor.Application.Questionnaires;

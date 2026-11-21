@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tutor.Application.Questionnaires;
 using Tutor.Application.Mentors;
+using Tutor.Domain.Applications;
 using Tutor.Application.Goals;
 using Tutor.Domain.Billing;
 using Tutor.Domain.Articles;
@@ -12,6 +13,7 @@ using Tutor.Domain.Mentorship;
 using Tutor.Domain.Questionnaires;
 using Tutor.Domain.Repositories;
 using Tutor.Domain.Users;
+using Tutor.Infrastructure.Application;
 using Tutor.Infrastructure.Articles;
 using Tutor.Infrastructure.Repositories;
 using Tutor.Infrastructure.Users;
@@ -47,6 +49,7 @@ public static class InfrastructureConfiguration
         services.AddScoped<IMentorSearchRepository, MentorSearchRepository>();
         services.AddScoped<IArticleRepository, ArticleRepository>();
         services.AddScoped<IS3Repository, S3Repository>();
+        services.AddScoped<IAppRepository, AppRepository>();
         services.AddScoped<IGoalRepository, GoalRepository>();
 
         services.AddGuidRepository<Skill>();
@@ -55,6 +58,7 @@ public static class InfrastructureConfiguration
         services.AddGuidRepository<AvailabilitySlot>();
         services.AddGuidRepository<AccountTransaction>();
         services.AddGuidRepository<Article>();
+        services.AddGuidRepository<App>();
         services.AddGuidRepository<MentorshipRequest>();
         services.AddGuidRepository<MentorshipPair>();
         services.AddGuidRepository<LearningGoal>();

@@ -1,5 +1,6 @@
 using FluentValidation;
 using Tutor.Application.Questionnaires;
+using Tutor.Domain.Questionnaires;
 
 namespace Tutor.Validators;
 
