@@ -11,6 +11,6 @@ namespace Tutor.Controllers.Skills;
 public class SkillsController(IGoalService service): TutorControllerBase
 {
     [HttpGet]
-    public Task<GoalPage<GoalSkillDto>> Skills([FromQuery] GoalLookupRequest request, CancellationToken ct) =>
+    public Task<GoalPage<GoalSkillDto>> GetSkills([FromQuery] GoalLookupRequest request, CancellationToken ct) =>
         service.GetSkillsAsync(request, ct);
 }

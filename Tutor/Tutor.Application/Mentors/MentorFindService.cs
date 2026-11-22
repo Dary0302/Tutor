@@ -4,8 +4,7 @@ using Tutor.Application.Questionnaires;
 
 namespace Tutor.Application.Mentors;
 
-public class MentorFindService(IMentorSearchRepository mentorSearchRepository, 
-    IQuestionnaireRepository questionnaireRepository): IMentorFindService
+public class MentorFindService(IQuestionnaireRepository questionnaireRepository): IMentorFindService
 {
     public async Task<Result<MentorFindResponse>> FindAsync(Guid mentorId, CancellationToken ct)
     {

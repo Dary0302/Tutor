@@ -16,6 +16,7 @@ public sealed class MentorsController(IMentorSearchService service, IMentorFindS
         var result = await service.SearchAsync(GetIdAuthorizedUser(), request, ct);
         return result.ToActionResult();
     }
+    
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<MentorFindResponse>> FindById(Guid id, CancellationToken ct)
     {
