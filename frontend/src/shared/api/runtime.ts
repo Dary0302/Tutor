@@ -88,6 +88,41 @@ export const mentorQuestionnaireSchema = questionnaireSchema.extend({
     .optional(),
 });
 export type MentorQuestionnaire = z.infer<typeof mentorQuestionnaireSchema>;
+export const applicationSchema = z.object({
+  id: z.uuid(),
+  questionnaireForm: mentorQuestionnaireSchema.nullish(),
+  reasonForRefusal: z.string().nullish(),
+});
+export const curatorApplicationSchema = z.object({
+  id: z.uuid(),
+  studentQuestionnaireForm: mentorQuestionnaireSchema.nullish(),
+  mentorQuestionnaireForm: mentorQuestionnaireSchema.nullish(),
+});
+export const applicationListSchema = z.union([
+  z.array(applicationSchema),
+  z
+    .object({ listApp: z.array(applicationSchema) })
+    .transform((value) => value.listApp),
+]);
+export const curatorApplicationListSchema = z.union([
+  z.array(curatorApplicationSchema),
+  z
+    .object({ listForTutorApp: z.array(curatorApplicationSchema) })
+    .transform((value) => value.listForTutorApp),
+]);
+const applicationDetailSchema = z.object({
+  id: z.uuid(),
+  studentId: z.uuid(),
+  mentorId: z.uuid(),
+});
+export const createdApplicationSchema = z.union([
+  applicationDetailSchema,
+  z
+    .object({ appDetail: applicationDetailSchema })
+    .transform((value) => value.appDetail),
+]);
+export type Application = z.infer<typeof applicationSchema>;
+export type CuratorApplication = z.infer<typeof curatorApplicationSchema>;
 const mentorCardSchema = z.object({
   userId: z.uuid(),
   questionnaireId: z.uuid(),

@@ -1,4 +1,5 @@
 import { useQueries } from '@tanstack/react-query';
+import type { ReactNode } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { useSession } from '@/entities/session';
 import {
@@ -46,7 +47,13 @@ function RequestError({ error, retry }: { error: Error; retry: () => void }) {
   );
 }
 
-export function MentorProfile({ id }: { id: string }) {
+export function MentorProfile({
+  id,
+  applicationAction,
+}: {
+  id: string;
+  applicationAction: ReactNode;
+}) {
   const { data: session, service } = useSession();
   const [params] = useSearchParams();
   const ids = comparisonIds(params);
@@ -117,7 +124,7 @@ export function MentorProfile({ id }: { id: string }) {
               placeholder="Расскажите, почему хотите заниматься и каких целей хотите достичь…"
             />
           </label>
-          <Button disabled>Отправить заявку</Button>
+          {applicationAction}
         </aside>
       </div>
     </>

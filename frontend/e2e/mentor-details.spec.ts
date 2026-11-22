@@ -29,5 +29,5 @@ test('search, compare and direct profile survive reload', async ({ page }) => {
   ).toBeVisible();
   await expect(
     page.getByRole('button', { name: 'Отправить заявку' }),
-  ).toBeDisabled();
+  ).toBeEnabled();
 });

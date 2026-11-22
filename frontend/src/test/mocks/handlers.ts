@@ -1,4 +1,5 @@
 import { http, HttpResponse } from 'msw';
+import { applicationHandlers, resetApplications } from './applications';
 import {
   mentorFixture,
   mentorQuestionnaireFixture,
@@ -12,10 +13,12 @@ const persistentMockKey = (authorization: string) =>
   `kurator.mock.questionnaire:${authorization}`;
 const browserMock = import.meta.env.DEV && !import.meta.env.TEST;
 export function resetMockState() {
+  resetApplications();
   registrations.clear();
   questionnaires.clear();
 }
 export const handlers = [
+  ...applicationHandlers,
   http.get('*/api/comparison', ({ request }) => {
     const id = new URL(request.url).searchParams.get('id');
     return id?.startsWith('22222222-')
@@ -59,7 +62,12 @@ export const handlers = [
   http.post('*/api/auth/log-in', async ({ request }) => {
     const body = (await request.json()) as { email: string };
     const role =
-      registrations.get(body.email) ?? (body.email.includes('mentor') ? 1 : 0);
+      registrations.get(body.email) ??
+      (body.email.includes('mentor')
+        ? 1
+        : body.email.includes('curator')
+          ? 2
+          : 0);
     return HttpResponse.json({
       message: 'User authenticated',
       status: 200,
@@ -78,7 +86,7 @@ export const handlers = [
         });
   }),
   http.get('*/api/auth/get-me', ({ request }) => {
-    const role = request.headers.get('Authorization')?.endsWith('1') ? 1 : 0;
+    const role = Number(request.headers.get('Authorization')?.slice(-1) ?? 0);
     return request.headers.has('Authorization')
       ? HttpResponse.json(profiles[role])
       : new HttpResponse(null, { status: 401 });

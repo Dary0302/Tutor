@@ -145,7 +145,7 @@
 }
 .two-columns {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   align-items: start;
   gap: var(--space-8);
   margin: var(--space-8) 0;

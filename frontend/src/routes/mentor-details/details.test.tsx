@@ -22,7 +22,7 @@ it('loads a direct profile with live questionnaire fields and no reviews', async
   expect(screen.queryByText(/Отзывы/)).not.toBeInTheDocument();
   expect(
     screen.getByRole('button', { name: 'Отправить заявку' }),
-  ).toBeDisabled();
+  ).toBeEnabled();
 });
 
 it('compares URL selections, removes a column and opens a profile', async () => {

@@ -2,6 +2,10 @@ import { Link, Navigate, useSearchParams } from 'react-router';
 import type { ReactNode } from 'react';
 import { useSession } from '@/entities/session';
 import { Button, Input, Select } from '@/shared/ui';
+import {
+  MentorApplications,
+  MentorApplicationCount,
+} from '@/features/applications';
 import { htmlTasks, cssTasks } from './fixtures';
 
 function Preview({ children }: { children: ReactNode }) {
@@ -15,45 +19,29 @@ function Preview({ children }: { children: ReactNode }) {
     );
   return <>{children}</>;
 }
-function Tags({ values }: { values: string[] }) {
-  return (
-    <ul className="tags">
-      {values.map((value) => (
-        <li className="tag" key={value}>
-          {value}
-        </li>
-      ))}
-    </ul>
-  );
-}
-const applicationData = [
-  [
-    'Екатерина Смирнова',
-    ['Data Science', 'Python'],
-    'найти стажировку за 6 месяцев',
-  ],
-  [
-    'Павел Андреев',
-    ['Backend', 'Архитектура'],
-    'спроектировать собственный сервис',
-  ],
-] as const;
 export function MentorHomeRoute() {
+  const { data } = useSession();
   const [params] = useSearchParams();
   const upcoming = params.get('session') !== 'none';
+  if (!data) return <Navigate to="/login" replace />;
+  if (data.role !== 1) return <h1>Доступ запрещён</h1>;
   return (
     <Preview>
       <h1>Главная наставника</h1>
       <p className="muted">
-        Здравствуйте, Алексей! Вот что происходит с вашим наставничеством.
+        Здравствуйте! Вот что происходит с вашим наставничеством.
       </p>
       <div className="stats">
         {[
           ['Проведено сессий', '32', 'За всё время'],
           ['Подопечных', '3', 'Сейчас занимаются с вами'],
-          ['Новых заявок', '2', 'Ожидают вашего решения'],
+          [
+            'Новых заявок',
+            <MentorApplicationCount key="count" />,
+            'Ожидают вашего решения',
+          ],
         ].map(([label, value, caption]) => (
-          <article className="stats__card" key={label}>
+          <article className="stats__card" key={String(label)}>
             <h2>{label}</h2>
             <strong>{value}</strong>
             <span>{caption}</span>
@@ -61,41 +49,16 @@ export function MentorHomeRoute() {
         ))}
       </div>
       <div className={upcoming ? 'two-columns' : 'preview-stack'}>
-        <section className="preview-stack">
-          <h2>
-            Заявки на наставничество <span className="tag">2 новые</span>
-          </h2>
-          {applicationData.map(([name, tags, goal]) => (
-            <article className="card" key={name}>
-              <div className="row">
-                <h3>{name}</h3>
-                <span className="muted">Сегодня</span>
-              </div>
-              <Tags values={[...tags]} />
-              <p>Цель: {goal}</p>
-              <div className="actions">
-                {['Принять', 'Уточнить', 'Отклонить'].map((label, i) => (
-                  <Button
-                    key={label}
-                    variant={i === 0 ? 'primary' : 'secondary'}
-                    disabled
-                  >
-                    {label}
-                  </Button>
-                ))}
-              </div>
-            </article>
-          ))}
-        </section>
+        <MentorApplications />
         {upcoming && (
           <aside className="preview-stack">
             <h2>Предстоящая сессия</h2>
             <article className="card preview-stack">
-              <Tags values={['3 ноября · вторник']} />
-              <h3>18:00 — 19:00</h3>
+              <p>3 ноября · вторник</p>
+              <h3>18:00–19:00</h3>
               <h3>Екатерина Смирнова</h3>
               <p>Разбор ML-проекта</p>
-              <Tags values={['Онлайн', '60 мин']} />
+              <p>Онлайн · 60 мин</p>
               <Link className="button button--primary" to="/calendar">
                 Открыть календарь
               </Link>

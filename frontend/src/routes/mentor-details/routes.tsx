@@ -2,6 +2,7 @@ import { Navigate, useParams } from 'react-router';
 import type { ReactNode } from 'react';
 import { useSession } from '@/entities/session';
 import { MentorComparison, MentorProfile } from '@/features/mentor-details';
+import { SendApplication } from '@/features/applications';
 
 function Access({ children }: { children: ReactNode }) {
   const { data } = useSession();
@@ -20,7 +21,10 @@ export function MentorProfileRoute() {
   const { id = '' } = useParams();
   return (
     <Access>
-      <MentorProfile id={id} />
+      <MentorProfile
+        id={id}
+        applicationAction={<SendApplication key={id} mentorId={id} />}
+      />
     </Access>
   );
 }

@@ -92,11 +92,12 @@
 }
 .page {
   width: var(--content-width);
-  margin: auto;
+  margin-inline: auto;
   padding: var(--reference-section-spacing) 0;
-  min-height: var(--page-min-height);
+  min-height: 0;
 }
 .site-footer {
+  flex-shrink: 0;
   margin: 0;
   background: var(--color-soft);
   padding: var(--reference-section-spacing) 0;
@@ -182,7 +183,7 @@
   margin-bottom: var(--space-5);
 }
 .auth-page {
-  min-height: var(--auth-reference-height);
+  min-height: 100svh;
   display: grid;
   place-content: center;
   padding: var(--space-12);

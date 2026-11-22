@@ -11,7 +11,12 @@ export function Dialog({
 }: {
   title: string;
   description?: string;
-  size?: 'compact' | 'wide' | 'details';
+  size?:
+    | 'compact'
+    | 'wide'
+    | 'details'
+    | 'application-cancel'
+    | 'application-refusal';
   children: ReactNode;
   onClose: () => void;
 }) {

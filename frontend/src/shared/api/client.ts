@@ -9,6 +9,9 @@ import {
   questionnaireSchema,
   mentorSearchResultSchema,
   mentorQuestionnaireSchema,
+  applicationListSchema,
+  curatorApplicationListSchema,
+  createdApplicationSchema,
 } from './runtime';
 import { z } from 'zod';
 
@@ -36,6 +39,78 @@ export function createApiClient(
     },
   });
   return {
+    async createApplication(mentorId: string) {
+      const r = await client.POST('/api/applications', {
+        body: mentorId,
+        parseAs: 'text',
+      });
+      return createdApplicationSchema.parse(
+        decodeResponse(r.response, r.data ?? r.error),
+      );
+    },
+    async studentApplications(signal?: AbortSignal) {
+      const r = await client.GET('/api/applications', {
+        ...(signal && { signal }),
+        parseAs: 'text',
+      });
+      if (r.response.status === 404) return [];
+      return applicationListSchema.parse(
+        decodeResponse(r.response, r.data ?? r.error),
+      );
+    },
+    async mentorApplications(signal?: AbortSignal) {
+      const r = await client.GET('/api/applications/mentor/get', {
+        ...(signal && { signal }),
+        parseAs: 'text',
+      });
+      if (r.response.status === 404) return [];
+      return applicationListSchema.parse(
+        decodeResponse(r.response, r.data ?? r.error),
+      );
+    },
+    async curatorApplications(signal?: AbortSignal) {
+      const r = await client.GET('/api/applications/tutor/get', {
+        ...(signal && { signal }),
+        parseAs: 'text',
+      });
+      if (r.response.status === 404) return [];
+      return curatorApplicationListSchema.parse(
+        decodeResponse(r.response, r.data ?? r.error),
+      );
+    },
+    async cancelApplication(id: string) {
+      const r = await client.DELETE('/api/applications', {
+        params: { query: { id } },
+        parseAs: 'text',
+      });
+      decodeResponse(r.response, r.data ?? r.error);
+    },
+    async approveApplication(role: 'mentor' | 'tutor', id: string) {
+      const path =
+        role === 'mentor'
+          ? '/api/applications/mentor/consent'
+          : '/api/applications/tutor/consent';
+      const r = await client.PUT(path, {
+        params: { query: { id } },
+        parseAs: 'text',
+      });
+      decodeResponse(r.response, r.data ?? r.error);
+    },
+    async refuseApplication(
+      role: 'mentor' | 'tutor',
+      id: string,
+      reasonForRefusal: string,
+    ) {
+      const path =
+        role === 'mentor'
+          ? '/api/applications/mentor/refusal'
+          : '/api/applications/tutor/refusal';
+      const r = await client.PUT(path, {
+        body: { id, reasonForRefusal },
+        parseAs: 'text',
+      });
+      decodeResponse(r.response, r.data ?? r.error);
+    },
     async register(body: components['schemas']['RegisterRequest']) {
       const r = await client.POST('/api/auth/register', {
         body,

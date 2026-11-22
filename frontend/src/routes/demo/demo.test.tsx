@@ -9,9 +9,10 @@ it.each(['/mentor', '/mentor?session=none'])(
     expect(
       await screen.findByRole('heading', { name: 'Главная наставника' }),
     ).toBeVisible();
+    expect(await screen.findByText('Заявок пока нет.')).toBeVisible();
     expect(
-      screen.getAllByRole('button', { name: 'Принять' })[0],
-    ).toBeDisabled();
+      screen.queryByRole('button', { name: 'Уточнить' }),
+    ).not.toBeInTheDocument();
     expect(
       !!screen.queryByRole('heading', { name: 'Предстоящая сессия' }),
     ).toBe(!path.includes('none'));

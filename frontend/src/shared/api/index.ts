@@ -12,4 +12,6 @@ export type {
   Questionnaire,
   MentorSearchItem,
   MentorQuestionnaire,
+  Application,
+  CuratorApplication,
 } from './runtime';
