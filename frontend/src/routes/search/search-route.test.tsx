@@ -57,8 +57,14 @@ it('renders live cards and keeps actions that require future integrations disabl
   expect(rated.getByText('86%')).toBeVisible();
   expect(rated.getByText('TypeScript')).toBeVisible();
   expect(rated.getByText('2,5 ч/нед')).toBeVisible();
-  expect(rated.getByRole('button', { name: 'Профиль' })).toBeDisabled();
-  expect(rated.getByRole('button', { name: 'Сравнить' })).toBeDisabled();
+  expect(rated.getByRole('link', { name: 'Профиль' })).toHaveAttribute(
+    'href',
+    `/mentors/${mentorFixture.userId}`,
+  );
+  expect(rated.getByRole('link', { name: 'Сравнить' })).toHaveAttribute(
+    'href',
+    `/compare?mentor=${mentorFixture.userId}`,
+  );
   const unrated = within(
     screen.getByRole('heading', { name: 'Игорь Петрова' }).closest('article')!,
   );

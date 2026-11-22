@@ -7,7 +7,12 @@ export default defineConfig({
   server: {
     proxy: { '/api': 'http://localhost:5003' },
     watch: {
-      ignored: ['**/.tools/**', '**/coverage/**', '**/test-results/**'],
+      ignored: [
+        '**/.tools/**',
+        '**/.pnpm-store/**',
+        '**/coverage/**',
+        '**/test-results/**',
+      ],
     },
   },
   plugins: [react(), tailwindcss()],

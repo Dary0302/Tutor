@@ -52,3 +52,14 @@ export const mentorFixture = {
   availablePlaces: 2,
   compatibility: 86,
 };
+export const mentorQuestionnaireFixture = {
+  ...questionnaireFixture,
+  firstName: mentorFixture.firstName,
+  lastName: mentorFixture.lastName,
+  teacherInfo: {
+    placeOfWork: mentorFixture.placeOfWork,
+    position: mentorFixture.position,
+    yearsExperience: mentorFixture.yearsExperience,
+    maxStudents: 3,
+  },
+};
