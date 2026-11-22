@@ -6,6 +6,7 @@ using Tutor.Application.Goals;
 using Tutor.Application.Auth;
 using Tutor.Application.Mentors;
 using Tutor.Application.Questionnaires;
+using Tutor.Application.Sessions;
 using Tutor.Domain.Applications;
 
 namespace Tutor.Application.Configurations;
@@ -21,6 +22,7 @@ public static class ApplicationConfiguration
             .AddScoped<IGoalProgressService, GoalProgressService>()
             .AddScoped<IGoalWorkflowService, GoalWorkflowService>()
             .AddScoped<IQuestionnaireService, QuestionnaireService>()
+            .AddScoped<ISessionService, SessionService>()
             .AddScoped<IMentorSearchService, MentorSearchService>()
             .AddScoped<IMentorCompatibilityService, MentorCompatibilityService>()
             .AddScoped<IAppService, AppService>()
