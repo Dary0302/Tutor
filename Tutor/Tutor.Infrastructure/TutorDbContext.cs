@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Tutor.Domain.Applications;
 using Tutor.Domain.Users;
 using Tutor.Domain.Articles;
 using Tutor.Infrastructure.Configurations;
@@ -11,6 +12,7 @@ internal sealed class TutorDbContext(DbContextOptions<TutorDbContext> options) :
 
     public DbSet<User> Users => Set<User>();
     public DbSet<Article> Articles => Set<Article>();
+    public DbSet<App> Applications => Set<App>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,5 +31,6 @@ internal sealed class TutorDbContext(DbContextOptions<TutorDbContext> options) :
         MentorshipMapping.Configure(modelBuilder);
         BillingMapping.Configure(modelBuilder);
         ArticlesMapping.Configure(modelBuilder);
+        AppMapping.Configure(modelBuilder);
     }
 }

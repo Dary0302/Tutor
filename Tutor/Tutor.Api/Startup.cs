@@ -1,8 +1,10 @@
 using Core.Common.Extensions;
 using Core.Common.Extensions.Validation;
 using Core.Common.HttpLogic;
+using Microsoft.AspNetCore.Identity;
 using Tutor.Application.Configurations;
 using Tutor.Authentication;
+using Tutor.Domain.Users;
 using Tutor.Infrastructure.Configurations;
 using Tutor.Validators;
 
@@ -21,6 +23,7 @@ public class Startup(IConfiguration configuration)
             .AddOpenApi("Tutor", typeof(ApplicationConfiguration))
             .AddAuthentication(configuration)
             .AddValidation<IValidationMarker>()
+            .AddScoped<IPasswordHasher<User>, PasswordHasher<User>>()
             .AddControllers();
     }
 

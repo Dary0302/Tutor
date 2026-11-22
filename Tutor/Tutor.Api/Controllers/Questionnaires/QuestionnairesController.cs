@@ -2,6 +2,7 @@ using Core.Common.Errors;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tutor.Application.Questionnaires;
+using Tutor.Domain.Questionnaires;
 using Tutor.Domain.Users;
 
 namespace Tutor.Controllers.Questionnaires;
