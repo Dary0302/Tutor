@@ -1,0 +1,9 @@
+# Стратегия тестирования
+
+Vitest + Testing Library/user-event/jsdom проверяют shell, role headers, auth/анкеты, ошибки, environment/runtime validation, HTTP boundary, private-cache cleanup и session races. MSW handlers переиспользуются dev worker и test server; fixtures изолированы от реальных аккаунтов. Не мокайте fetch или внутренний API-клиент. Worker start может быть изолирован в startup test без подмены HTTP boundary. Platform Web Locks в jsdom моделируется явно; межвкладочные race tests дополнительно проверяют сериализацию с перечитыванием rotated token.
+
+V8 coverage включает **все production TS/TSX**, включая entry point и конфигурацию. Исключены только тесты, инфраструктура `src/test` и декларации типов (не исполняемый код). Пороги: statements 80%, lines 80%, functions 75%, branches 70%. Нельзя исключать production, ослаблять пороги или писать assertions ради процентов. Приоритет — критические пути, ошибки, разрешения и регрессии. Snapshots без обоснования запрещены.
+
+Playwright использует только Chromium. Два @smoke сценария — открытие приложения и 404 с возвратом; ещё два — register→login→questionnaire/save→reload session→logout для Student/Mentor, через общий MSW dev worker. Full suite содержит всего 4 сценария. Отдельный live прогон на доступном backend проверяет реальные 201/204, значения после reload и перезапуска браузера; это не результат MSW suite. Локально запускайте затронутый spec или smoke; полный suite — CI или сквозной поток. Full workflow доступен вручную. Не добавляйте visual regression или отдельную accessibility инфраструктуру.
+
+Screenshot/video/trace сохраняются только при failure, reporter line. Build не заменяет browser runtime smoke. `pnpm verify` всегда включает smoke; перед ним браузер устанавливается `pnpm exec playwright install chromium` (в Linux CI — `--with-deps`). Hosted CI ещё требует проверки после подключения GitHub remote.

@@ -1,0 +1,11 @@
+# Frontend integration
+
+Канонические endpoints: POST /api/auth/register (201 без session), POST /api/auth/log-in, PUT /api/auth/refresh, GET /api/auth/get-me, GET/PUT /api/questionnaires/me (404 означает новую анкету, PUT success 204). Auth errors — envelope message/status/data; questionnaire errors — ProblemDetails/errors. Все запросы идут через типизированный openapi-fetch, данные ответов проверяются Zod. Валидация numeric/string enums выполняется на boundary; запросы используют числовые enum, допустимые backend property converters.
+
+UI role mapping: Student=0 — менти, Mentor=1 — наставник, Tutor=2 — куратор (кабинет вне этапа). После регистрации — отдельный вход; после входа — собственная анкета. Сессия живёт в Query, Context содержит service. Refresh token и случайный идентификатор сессии сохраняются в versioned storage record; access token не сохраняется. Идентификатор позволяет не запускать циклический refresh при каждой ротации из соседней вкладки и отличать другой аккаунт. Web Locks сериализует ротации; storage events очищают private cache при выходе/смене аккаунта. Неподдерживаемый Web Locks или запрещённое storage показывают явную ошибку.
+
+Поле «Город / часовой пояс» сохраняется целиком как city. Отдельной timezone сущности нет. Duration — monthsNumberMin/Max. Навыки — отдельные пары name/skillLevel. Временные окна локальные, сериализуются HH:mm:ss (TimeOnly); часовой пояс не пересчитывается. Mentor teacherInfo обязательно, для Student опускается. Dirty form не заполняется заново при refetch. Бизнес-правила диапазонов/навыков/окон реализованы в feature model; серверные field errors отображаются в форме, неизвестные — общим сообщением.
+
+На `/search` карточки и совместимость загружаются авторизованным `GET /api/mentors`. Для `HasAvailablePlaces` параметр отсутствует при выборе «Неважно», равен `true` при «Да» и `false` при «Нет». Дни недели сериализуются повторяющимися значениями `DaysOfWeek`. Для совместимости сервер учитывает срок из анкеты. Поле выбора навыков, открытие профиля и сравнение из выдачи ожидают подключения соответствующих сценариев.
+
+Демонстрационные matching/calendar/goals данные из src/routes/demo/fixtures.ts не попадают в Query cache и не заменяют реальные пользовательские данные. Для регистрации/входа/анкет runtime использует backend, если MSW dev opt-in выключен.
