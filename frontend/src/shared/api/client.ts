@@ -8,6 +8,7 @@ import {
   sessionSchema,
   questionnaireSchema,
   mentorSearchResultSchema,
+  mentorQuestionnaireSchema,
 } from './runtime';
 import { z } from 'zod';
 
@@ -78,6 +79,16 @@ export function createApiClient(
         parseAs: 'text',
       });
       return mentorSearchResultSchema.parse(
+        decodeResponse(r.response, r.data ?? r.error),
+      );
+    },
+    async mentorQuestionnaire(id: string, signal?: AbortSignal) {
+      const r = await client.GET('/api/comparison', {
+        params: { query: { id } },
+        ...(signal && { signal }),
+        parseAs: 'text',
+      });
+      return mentorQuestionnaireSchema.parse(
         decodeResponse(r.response, r.data ?? r.error),
       );
     },

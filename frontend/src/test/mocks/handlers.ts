@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw';
 import {
   mentorFixture,
+  mentorQuestionnaireFixture,
   mockSession,
   profiles,
   refreshTokens,
@@ -15,6 +16,12 @@ export function resetMockState() {
   questionnaires.clear();
 }
 export const handlers = [
+  http.get('*/api/comparison', ({ request }) => {
+    const id = new URL(request.url).searchParams.get('id');
+    return id?.startsWith('22222222-')
+      ? HttpResponse.json(mentorQuestionnaireFixture)
+      : new HttpResponse(null, { status: 404 });
+  }),
   http.get('*/api/mentors', ({ request }) => {
     if (!request.headers.has('Authorization'))
       return new HttpResponse(null, { status: 401 });

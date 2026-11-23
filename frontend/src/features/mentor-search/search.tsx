@@ -24,7 +24,11 @@ export function MentorSearch({
 
   function pageLink(target: number) {
     const search = searchAddress(filters, sort, target).toString();
-    return { search: search ? `?${search}` : '' };
+    return { search: withSelection(new URLSearchParams(search)).toString() };
+  }
+  function withSelection(next: URLSearchParams) {
+    for (const id of params.getAll('mentor')) next.append('mentor', id);
+    return next;
   }
 
   return (
@@ -32,7 +36,7 @@ export function MentorSearch({
       <SearchFilters
         key={filters.toString()}
         applied={filters}
-        onApply={(next) => setParams(searchAddress(next, sort))}
+        onApply={(next) => setParams(withSelection(searchAddress(next, sort)))}
       />
       <section className="preview-stack" aria-label="Результаты подбора">
         <select
@@ -40,7 +44,9 @@ export function MentorSearch({
           aria-label="Сортировка"
           value={sort}
           onChange={(event) =>
-            setParams(searchAddress(filters, Number(event.target.value)))
+            setParams(
+              withSelection(searchAddress(filters, Number(event.target.value))),
+            )
           }
         >
           {sortOptions.map(([value, label]) => (

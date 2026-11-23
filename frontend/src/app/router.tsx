@@ -28,13 +28,14 @@ export const routeObjects = [
       {
         path: 'compare',
         lazy: async () => ({
-          Component: (await import('@/routes/demo')).CompareRoute,
+          Component: (await import('@/routes/mentor-details')).CompareRoute,
         }),
       },
       {
         path: 'mentors/:id',
         lazy: async () => ({
-          Component: (await import('@/routes/demo')).MentorProfileRoute,
+          Component: (await import('@/routes/mentor-details'))
+            .MentorProfileRoute,
         }),
       },
       {

@@ -1,7 +1,1 @@
-export {
-  CompareRoute,
-  MentorProfileRoute,
-  MentorHomeRoute,
-  CalendarRoute,
-  GoalsRoute,
-} from './pages';
+export { MentorHomeRoute, CalendarRoute, GoalsRoute } from './pages';

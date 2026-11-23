@@ -1,4 +1,5 @@
-import { Link, NavLink } from 'react-router';
+import { Link, NavLink, useSearchParams } from 'react-router';
+import { comparisonAddress, comparisonIds } from '@/shared/lib';
 import { Button } from './controls';
 import { useState } from 'react';
 
@@ -39,6 +40,8 @@ export function SiteHeader({
   onLogout: () => void;
 }) {
   const [open, setOpen] = useState(false);
+  const [params] = useSearchParams();
+  const selection = comparisonIds(params);
   return (
     <header
       className={
@@ -54,7 +57,14 @@ export function SiteHeader({
                 ([label, path]) => (
                   <li key={label}>
                     {path ? (
-                      <NavLink className="site-header__link" to={path}>
+                      <NavLink
+                        className="site-header__link"
+                        to={
+                          path === '/compare' || path === '/search'
+                            ? comparisonAddress(path, selection)
+                            : path
+                        }
+                      >
                         {label}
                       </NavLink>
                     ) : (

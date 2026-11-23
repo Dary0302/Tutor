@@ -1,10 +1,13 @@
-import { Button } from '@/shared/ui';
 import type { MentorSearchItem } from '@/shared/api';
+import { Link, useSearchParams } from 'react-router';
+import { comparisonAddress, comparisonIds } from '@/shared/lib';
 
 const format = new Intl.NumberFormat('ru');
 const placesPlural = new Intl.PluralRules('ru');
 
 export function MentorCard({ mentor }: { mentor: MentorSearchItem }) {
+  const [params] = useSearchParams();
+  const selected = comparisonIds(params);
   const name = [mentor.firstName, mentor.lastName].filter(Boolean).join(' ');
   const work = [mentor.position, mentor.placeOfWork]
     .filter(Boolean)
@@ -63,10 +66,18 @@ export function MentorCard({ mentor }: { mentor: MentorSearchItem }) {
         </li>
       </ul>
       <div className="mentor-card__actions">
-        <Button disabled>Профиль</Button>
-        <Button variant="secondary" disabled>
+        <Link
+          className="button button--primary"
+          to={comparisonAddress(`/mentors/${mentor.userId}`, selected)}
+        >
+          Профиль
+        </Link>
+        <Link
+          className="button button--secondary"
+          to={comparisonAddress('/compare', [...selected, mentor.userId])}
+        >
           Сравнить
-        </Button>
+        </Link>
       </div>
     </article>
   );

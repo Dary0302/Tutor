@@ -69,6 +69,25 @@ export const questionnaireSchema = z.object({
 export type Profile = z.infer<typeof profileSchema>;
 export type Session = z.infer<typeof sessionSchema>;
 export type Questionnaire = z.infer<typeof questionnaireSchema>;
+export const mentorQuestionnaireSchema = questionnaireSchema.extend({
+  firstName: z.string().nullable(),
+  lastName: z.string().nullable(),
+  city: z.string().nullable(),
+  education: z.string().nullable(),
+  goalDescription: z.string().nullable(),
+  skills: questionnaireSchema.shape.skills.nullable(),
+  availability: questionnaireSchema.shape.availability.nullable(),
+  teacherInfo: z
+    .object({
+      placeOfWork: z.string().nullable(),
+      position: z.string().nullable(),
+      yearsExperience: z.number(),
+      maxStudents: z.number(),
+    })
+    .nullable()
+    .optional(),
+});
+export type MentorQuestionnaire = z.infer<typeof mentorQuestionnaireSchema>;
 const mentorCardSchema = z.object({
   userId: z.uuid(),
   questionnaireId: z.uuid(),
