@@ -22,6 +22,7 @@ public static class ApplicationConfiguration
             .AddScoped<IGoalWorkflowService, GoalWorkflowService>()
             .AddScoped<IQuestionnaireService, QuestionnaireService>()
             .AddScoped<IMentorSearchService, MentorSearchService>()
+            .AddScoped<IMentorFindService, MentorFindService>()
             .AddScoped<IMentorCompatibilityService, MentorCompatibilityService>()
             .AddScoped<IAppService, AppService>()
             .AddAutoMapper(_ => { }, typeof(QuestionnaireProfile));
