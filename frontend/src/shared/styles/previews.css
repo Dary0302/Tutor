@@ -145,7 +145,7 @@
 }
 .two-columns {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   align-items: start;
   gap: var(--space-8);
   margin: var(--space-8) 0;
@@ -342,6 +342,18 @@
   border-spacing: 0 var(--space-4);
   width: 100%;
   text-align: left;
+}
+.comparison__container {
+  overflow-x: auto;
+  margin-top: var(--space-5);
+}
+.comparison__name {
+  font-size: var(--font-form-heading);
+  margin-bottom: var(--space-4);
+}
+.comparison td {
+  vertical-align: top;
+  min-width: var(--filter-width);
 }
 .comparison th,
 .comparison td {

@@ -4,6 +4,352 @@
  */
 
 export interface paths {
+    "/api/applications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["AppListDto"][];
+                        "application/json": components["schemas"]["AppListDto"][];
+                        "text/json": components["schemas"]["AppListDto"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": string;
+                    "text/json": string;
+                    "application/*+json": string;
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["AppDetailDto"];
+                        "application/json": components["schemas"]["AppDetailDto"];
+                        "text/json": components["schemas"]["AppDetailDto"];
+                    };
+                };
+            };
+        };
+        delete: {
+            parameters: {
+                query?: {
+                    id?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["AppDetailDto"];
+                        "application/json": components["schemas"]["AppDetailDto"];
+                        "text/json": components["schemas"]["AppDetailDto"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/applications/mentor/get": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["AppListDto"][];
+                        "application/json": components["schemas"]["AppListDto"][];
+                        "text/json": components["schemas"]["AppListDto"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/applications/mentor/old/get": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["AppListDto"][];
+                        "application/json": components["schemas"]["AppListDto"][];
+                        "text/json": components["schemas"]["AppListDto"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/applications/mentor/consent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: {
+                    id?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/applications/mentor/refusal": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["PlaceApproveRequest"];
+                    "text/json": components["schemas"]["PlaceApproveRequest"];
+                    "application/*+json": components["schemas"]["PlaceApproveRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/applications/tutor/get": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["AppListForTutorDto"][];
+                        "application/json": components["schemas"]["AppListForTutorDto"][];
+                        "text/json": components["schemas"]["AppListForTutorDto"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/applications/tutor/consent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: {
+                    id?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/applications/tutor/refusal": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["PlaceApproveRequest"];
+                    "text/json": components["schemas"]["PlaceApproveRequest"];
+                    "application/*+json": components["schemas"]["PlaceApproveRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/articles": {
         parameters: {
             query?: never;
@@ -453,6 +799,462 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/comparison": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    id?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["QuestionnaireFormDto"];
+                        "application/json": components["schemas"]["QuestionnaireFormDto"];
+                        "text/json": components["schemas"]["QuestionnaireFormDto"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/goals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    PairId?: string;
+                    Status?: components["schemas"]["GoalStatus"];
+                    Page?: number;
+                    PageSize?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["GoalDtoGoalPage"];
+                        "application/json": components["schemas"]["GoalDtoGoalPage"];
+                        "text/json": components["schemas"]["GoalDtoGoalPage"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CreateGoalRequest"];
+                    "text/json": components["schemas"]["CreateGoalRequest"];
+                    "application/*+json": components["schemas"]["CreateGoalRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["GoalDto"];
+                        "application/json": components["schemas"]["GoalDto"];
+                        "text/json": components["schemas"]["GoalDto"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/goals/{goalId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    goalId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["GoalDto"];
+                        "application/json": components["schemas"]["GoalDto"];
+                        "text/json": components["schemas"]["GoalDto"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    goalId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/goals/students": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    Page?: number;
+                    PageSize?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["GoalStudentDtoGoalPage"];
+                        "application/json": components["schemas"]["GoalStudentDtoGoalPage"];
+                        "text/json": components["schemas"]["GoalStudentDtoGoalPage"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/goals/skills": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    Query?: string;
+                    Page?: number;
+                    PageSize?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["GoalSkillDtoGoalPage"];
+                        "application/json": components["schemas"]["GoalSkillDtoGoalPage"];
+                        "text/json": components["schemas"]["GoalSkillDtoGoalPage"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/goals/progress": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    PairId?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["SkillProgressDto"][];
+                        "application/json": components["schemas"]["SkillProgressDto"][];
+                        "text/json": components["schemas"]["SkillProgressDto"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/goals/{goalId}/tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    goalId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["CreateGoalTaskRequest"];
+                    "text/json": components["schemas"]["CreateGoalTaskRequest"];
+                    "application/*+json": components["schemas"]["CreateGoalTaskRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["GoalDto"];
+                        "application/json": components["schemas"]["GoalDto"];
+                        "text/json": components["schemas"]["GoalDto"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/goals/{goalId}/tasks/{taskId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    goalId: string;
+                    taskId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["GoalDto"];
+                        "application/json": components["schemas"]["GoalDto"];
+                        "text/json": components["schemas"]["GoalDto"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/goals/{goalId}/tasks/{taskId}/completion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    goalId: string;
+                    taskId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["SetGoalTaskCompletionRequest"];
+                    "text/json": components["schemas"]["SetGoalTaskCompletionRequest"];
+                    "application/*+json": components["schemas"]["SetGoalTaskCompletionRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["GoalDto"];
+                        "application/json": components["schemas"]["GoalDto"];
+                        "text/json": components["schemas"]["GoalDto"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/goals/{goalId}/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    goalId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["GoalDto"];
+                        "application/json": components["schemas"]["GoalDto"];
+                        "text/json": components["schemas"]["GoalDto"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/mentors": {
         parameters: {
             query?: never;
@@ -568,6 +1370,26 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        AppDetailDto: {
+            /** Format: uuid */
+            id?: string;
+            /** Format: uuid */
+            studentId?: string;
+            /** Format: uuid */
+            mentorId?: string;
+        };
+        AppListDto: {
+            /** Format: uuid */
+            id?: string;
+            questionnaireForm?: components["schemas"]["QuestionnaireFormDto"];
+            reasonForRefusal?: string | null;
+        };
+        AppListForTutorDto: {
+            /** Format: uuid */
+            id?: string;
+            studentQuestionnaireForm?: components["schemas"]["QuestionnaireFormDto"];
+            mentorQuestionnaireForm?: components["schemas"]["QuestionnaireFormDto"];
+        };
         ArticleDetailDto: {
             /** Format: uuid */
             id?: string;
@@ -601,6 +1423,18 @@ export interface components {
             title?: string | null;
             content?: string | null;
         };
+        CreateGoalRequest: {
+            /** Format: uuid */
+            pairId?: string;
+            /** Format: uuid */
+            skillId?: string;
+            title: string | null;
+            description?: string | null;
+            tasks: components["schemas"]["CreateGoalTaskRequest"][] | null;
+        };
+        CreateGoalTaskRequest: {
+            name: string | null;
+        };
         /**
          * Format: int32
          * @enum {integer}
@@ -610,6 +1444,93 @@ export interface components {
             name: string | null;
             skillLevel?: components["schemas"]["SkillLevel"];
         };
+        GoalDto: {
+            /** Format: uuid */
+            id?: string;
+            /** Format: uuid */
+            pairId?: string;
+            title: string | null;
+            description: string | null;
+            /** Format: uuid */
+            skillId?: string;
+            skillName: string | null;
+            status?: components["schemas"]["GoalStatus"];
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            closedAt?: string | null;
+            /** Format: int32 */
+            totalTasks?: number;
+            /** Format: int32 */
+            completedTasks?: number;
+            tasks: components["schemas"]["GoalTaskDto"][] | null;
+        };
+        GoalDtoGoalPage: {
+            items?: components["schemas"]["GoalDto"][] | null;
+            /** Format: int32 */
+            totalCount?: number;
+            /** Format: int32 */
+            page?: number;
+            /** Format: int32 */
+            pageSize?: number;
+            /** Format: int32 */
+            readonly totalPages?: number;
+        };
+        GoalSkillDto: {
+            /** Format: uuid */
+            id?: string;
+            name: string | null;
+        };
+        GoalSkillDtoGoalPage: {
+            items?: components["schemas"]["GoalSkillDto"][] | null;
+            /** Format: int32 */
+            totalCount?: number;
+            /** Format: int32 */
+            page?: number;
+            /** Format: int32 */
+            pageSize?: number;
+            /** Format: int32 */
+            readonly totalPages?: number;
+        };
+        /**
+         * Format: int32
+         * @enum {integer}
+         */
+        GoalStatus: 0 | 1 | 2 | 3;
+        GoalStudentDto: {
+            /** Format: uuid */
+            pairId?: string;
+            /** Format: uuid */
+            studentId?: string;
+            firstName?: string | null;
+            lastName?: string | null;
+        };
+        GoalStudentDtoGoalPage: {
+            items?: components["schemas"]["GoalStudentDto"][] | null;
+            /** Format: int32 */
+            totalCount?: number;
+            /** Format: int32 */
+            page?: number;
+            /** Format: int32 */
+            pageSize?: number;
+            /** Format: int32 */
+            readonly totalPages?: number;
+        };
+        GoalTaskDto: {
+            /** Format: uuid */
+            id?: string;
+            name: string | null;
+            status?: components["schemas"]["GoalTaskStatus"];
+            /** Format: date-time */
+            completedAt?: string | null;
+            /** Format: int32 */
+            position?: number;
+        };
+        /**
+         * Format: int32
+         * @enum {integer}
+         */
+        GoalTaskStatus: 0 | 1 | 2;
         LoginRequest: {
             email?: string | null;
             password?: string | null;
@@ -664,6 +1585,11 @@ export interface components {
          * @enum {integer}
          */
         MentorSort: 0 | 1 | 2 | 3;
+        PlaceApproveRequest: {
+            /** Format: uuid */
+            id?: string;
+            reasonForRefusal?: string | null;
+        };
         QuestionnaireFormDto: {
             firstName: string | null;
             lastName: string | null;
@@ -690,11 +1616,25 @@ export interface components {
             password?: string | null;
             role?: components["schemas"]["UserRole"];
         };
+        SetGoalTaskCompletionRequest: {
+            isCompleted: boolean;
+        };
         /**
          * Format: int32
          * @enum {integer}
          */
         SkillLevel: 0 | 1 | 2 | 3;
+        SkillProgressDto: {
+            /** Format: uuid */
+            skillId?: string;
+            skillName: string | null;
+            /** Format: int32 */
+            totalTasks?: number;
+            /** Format: int32 */
+            completedTasks?: number;
+            /** Format: double */
+            percentage?: number;
+        };
         TimeWindowDto: {
             dayOfWeek: components["schemas"]["DayOfWeek"];
             /** Format: time */

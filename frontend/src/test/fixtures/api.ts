@@ -9,10 +9,16 @@ export const profiles = [
     email: 'mentor@example.test',
     role: 1,
   },
+  {
+    id: '33333333-3333-4333-8333-333333333333',
+    email: 'curator@example.test',
+    role: 2,
+  },
 ];
 export const refreshTokens = [
   'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
   'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+  'cccccccc-cccc-4ccc-8ccc-cccccccccccc',
 ];
 export function mockSession(role = 0) {
   return {
@@ -51,4 +57,15 @@ export const mentorFixture = {
   hoursPerWeek: 2.5,
   availablePlaces: 2,
   compatibility: 86,
+};
+export const mentorQuestionnaireFixture = {
+  ...questionnaireFixture,
+  firstName: mentorFixture.firstName,
+  lastName: mentorFixture.lastName,
+  teacherInfo: {
+    placeOfWork: mentorFixture.placeOfWork,
+    position: mentorFixture.position,
+    yearsExperience: mentorFixture.yearsExperience,
+    maxStudents: 3,
+  },
 };

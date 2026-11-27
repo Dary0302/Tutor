@@ -2,23 +2,6 @@ import { screen, within } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { renderPage } from '@/test/render';
 
-it('shows the existing mentor profile preview by its direct address', async () => {
-  renderPage('/mentors/alexey', 0);
-  expect(
-    await screen.findByRole('heading', { name: 'Алексей Морозов', level: 1 }),
-  ).toBeVisible();
-  expect(
-    screen.getByRole('button', { name: 'Отправить заявку' }),
-  ).toBeDisabled();
-});
-it('shows comparison criteria without claiming a live comparison operation', async () => {
-  renderPage('/compare', 0);
-  expect(
-    await screen.findByRole('heading', { name: 'Сравнение наставников' }),
-  ).toBeVisible();
-  expect(screen.getByRole('table')).toHaveTextContent('Свободные слоты');
-  expect(screen.getAllByRole('button', { name: 'Убрать' })).toHaveLength(3);
-});
 it.each(['/mentor', '/mentor?session=none'])(
   'shows mentor dashboard variant %s with unavailable mutations',
   async (path) => {
@@ -26,9 +9,10 @@ it.each(['/mentor', '/mentor?session=none'])(
     expect(
       await screen.findByRole('heading', { name: 'Главная наставника' }),
     ).toBeVisible();
+    expect(await screen.findByText('Заявок пока нет.')).toBeVisible();
     expect(
-      screen.getAllByRole('button', { name: 'Принять' })[0],
-    ).toBeDisabled();
+      screen.queryByRole('button', { name: 'Уточнить' }),
+    ).not.toBeInTheDocument();
     expect(
       !!screen.queryByRole('heading', { name: 'Предстоящая сессия' }),
     ).toBe(!path.includes('none'));

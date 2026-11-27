@@ -4,6 +4,7 @@
 @import './site.css';
 @import './forms.css';
 @import './previews.css';
+@import './applications.css';
 
 :root {
   --auth-decoration: url('/assets/auth-decoration.svg');
@@ -16,12 +17,17 @@
   --color-match: #247d76;
   --color-success-background: #e5f4ef;
   --color-inactive: #f1f5f9;
-  --content-width: 83rem;
-  --wide-content-width: 100rem;
+  --page-gutter: 3rem;
+  --content-max-width: 100rem;
+  --content-width: min(
+    var(--content-max-width),
+    calc(100% - 2 * var(--page-gutter))
+  );
+  --wide-content-width: var(--content-width);
   --header-height: 5.75rem;
   --header-logo-font-size: 1.5rem;
   --header-nav-font-size: 0.8125rem;
-  --header-content-width: 78.75rem;
+  --header-content-width: var(--content-width);
   --guest-header-height: 5.5rem;
   --wordmark-gap: 0.625rem;
   --profile-icon-radius: 0.25rem;
@@ -33,6 +39,8 @@
   --radius-button: 0.75rem;
   --profile-size: 2.75rem;
   --dialog-width: 30.625rem;
+  --dialog-application-cancel-width: 29.1875rem;
+  --dialog-application-refusal-width: 29.5rem;
   --dialog-wide-width: 37.5rem;
   --dialog-detail-width: 43.75rem;
   --dialog-mentor-width: 31.75rem;
@@ -97,7 +105,7 @@
   --font-weight-heading: 700;
   --line-height-heading: 1.2;
   --line-height-body: 1.5;
-  --desktop-min-width: 90rem;
+  --desktop-min-width: 80rem;
   --radius-panel: 1.25rem;
   color: var(--color-text);
   background: var(--color-background);
@@ -105,6 +113,14 @@
 }
 * {
   box-sizing: border-box;
+}
+.card,
+.preview-stack,
+.field {
+  min-width: 0;
+}
+.card {
+  overflow-wrap: anywhere;
 }
 :focus-visible {
   outline: var(--border-width) solid var(--color-primary);
@@ -116,6 +132,15 @@ body {
   min-width: var(--desktop-min-width);
   font-family: var(--font-family);
   line-height: var(--line-height-body);
+}
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+#root > main {
+  flex: 1;
+  min-width: 0;
 }
 a {
   color: var(--color-accent);

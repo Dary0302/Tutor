@@ -11,4 +11,7 @@ export type {
   Session,
   Questionnaire,
   MentorSearchItem,
+  MentorQuestionnaire,
+  Application,
+  CuratorApplication,
 } from './runtime';

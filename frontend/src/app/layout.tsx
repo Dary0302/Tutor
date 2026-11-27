@@ -12,7 +12,7 @@ export function RootLayout() {
     !auth && (session.data?.role ?? 2) < 2,
   );
   const wide =
-    /^\/(mentors\/|mentor(?:$|\/)|calendar|goals|rewards|approval-queue)/.test(
+    /^\/(mentors\/|mentor(?:$|\/)|calendar|goals|rewards|approval-queue|applications)/.test(
       location.pathname,
     );
   if (session.isPending)

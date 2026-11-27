@@ -1,1 +1,1 @@
-export { ApprovalQueueRoute, RewardsRoute } from './pages';
+export { RewardsRoute } from './pages';

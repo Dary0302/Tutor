@@ -1,8 +1,12 @@
-import { Link, Navigate, useParams, useSearchParams } from 'react-router';
+import { Link, Navigate, useSearchParams } from 'react-router';
 import type { ReactNode } from 'react';
 import { useSession } from '@/entities/session';
 import { Button, Input, Select } from '@/shared/ui';
-import { mentors, htmlTasks, cssTasks } from './fixtures';
+import {
+  MentorApplications,
+  MentorApplicationCount,
+} from '@/features/applications';
+import { htmlTasks, cssTasks } from './fixtures';
 
 function Preview({ children }: { children: ReactNode }) {
   const session = useSession();
@@ -15,208 +19,29 @@ function Preview({ children }: { children: ReactNode }) {
     );
   return <>{children}</>;
 }
-function Tags({ values }: { values: string[] }) {
-  return (
-    <ul className="tags">
-      {values.map((value) => (
-        <li className="tag" key={value}>
-          {value}
-        </li>
-      ))}
-    </ul>
-  );
-}
-function Star() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="m12 2 3 6 7 1-5 5 1 8-6-4-6 4 1-8-5-5 7-1Z" />
-    </svg>
-  );
-}
-export function CompareRoute() {
-  const rows: [string, (m: (typeof mentors)[number]) => ReactNode][] = [
-    ['Совместимость', (m) => <span className="match">{m.score}%</span>],
-    [
-      'Рейтинг',
-      (m) => (
-        <>
-          <Star /> {m.rating}
-        </>
-      ),
-    ],
-    ['Опыт', (m) => `${m.years} лет`],
-    [
-      'Навыки',
-      (m) => <Tags values={m.skills.filter((s) => s !== 'Нейросети')} />,
-    ],
-    ['Доступность', (m) => `${m.hours} ч/нед`],
-    ['Длительность', (m) => <Tags values={m.months} />],
-    ['Свободные слоты', (m) => m.days],
-  ];
-  return (
-    <Preview>
-      <h1 className="page-title">Сравнение наставников</h1>
-      <div className="card">
-        <table className="comparison">
-          <thead>
-            <tr>
-              <th scope="col">
-                <span className="visually-hidden">Критерий</span>
-              </th>
-              {mentors.map((m) => (
-                <th key={m.id} scope="col">
-                  {m.name}
-                  <br />
-                  <Button variant="secondary" disabled>
-                    Убрать
-                  </Button>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map(([label, render]) => (
-              <tr key={label}>
-                <th scope="row">{label}</th>
-                {mentors.map((m) => (
-                  <td key={m.id}>{render(m)}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-          <tfoot>
-            <tr>
-              <td />
-              {mentors.map((m) => (
-                <td key={m.id}>
-                  {m.id === 'alexey' ? (
-                    <Link
-                      className="button button--primary"
-                      to={`/mentors/${m.id}`}
-                    >
-                      Выбрать
-                    </Link>
-                  ) : (
-                    <Button disabled>Выбрать</Button>
-                  )}
-                </td>
-              ))}
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-    </Preview>
-  );
-}
-export function MentorProfileRoute() {
-  const { id } = useParams();
-  if (id !== 'alexey') return <Navigate to="/not-found" replace />;
-  return (
-    <Preview>
-      <Link to="/search">‹ К результатам поиска</Link>
-      <div className="two-columns profile-layout">
-        <section className="preview-stack">
-          <article className="card">
-            <div className="profile-heading">
-              <span className="avatar">А</span>
-              <div>
-                <h1>Алексей Морозов</h1>
-                <p className="muted">
-                  Senior Data Scientist · Яндекс · 7 лет опыта
-                </p>
-                <Tags values={['Python', 'Нейросети', 'ML']} />
-              </div>
-            </div>
-            <h2>О наставнике</h2>
-            <p>
-              Рекомендательные системы, NLP, проекты в поиске
-              <br />и голосовых ассистентах. Помогу выстроить путь в Data
-              Science.
-            </p>
-          </article>
-          <h2>
-            Отзывы{' '}
-            <span className="tag">
-              <Star /> 4.9 · 12 отзывов
-            </span>
-          </h2>
-          {[
-            ['Дмитрий К.', 'Помог собрать портфолио и выйти на стажировку.'],
-            ['Анна П.', 'Чёткие задачи и честная обратная связь.'],
-          ].map(([name, text]) => (
-            <article className="card" key={name}>
-              <div className="row">
-                <h3>{name}</h3>
-                <span>
-                  <Star /> 5.0
-                </span>
-              </div>
-              <p className="muted">
-                Полезность 5 · Коммуникация 5 · Пунктуальность 5
-              </p>
-              <p>{text}</p>
-            </article>
-          ))}
-        </section>
-        <aside className="card preview-stack">
-          <strong className="match match--large">94%</strong>
-          <p>совместимость с вами</p>
-          <Tags values={['1,5 ч/нед']} />
-          <h2>Длительность наставничества</h2>
-          <Tags values={['1 мес.', '3 мес.', '6 мес.']} />
-          <h2>Формат урока</h2>
-          <Tags values={['Очно', 'Онлайн']} />
-          <h2>Доступные слоты</h2>
-          <Tags values={['Пн 18:00', 'Ср 19:00', 'Сб 11:00']} />
-          <label className="field">
-            Сопроводительное сообщение
-            <textarea
-              className="field__control"
-              rows={5}
-              disabled
-              placeholder="Расскажите, почему хотите заниматься и каких целей хотите достичь…"
-            />
-          </label>
-          <Button disabled>Отправить заявку</Button>
-        </aside>
-      </div>
-    </Preview>
-  );
-}
-const applicationData = [
-  [
-    'Екатерина Смирнова',
-    ['Data Science', 'Python'],
-    'найти стажировку за 6 месяцев',
-  ],
-  [
-    'Павел Андреев',
-    ['Backend', 'Архитектура'],
-    'спроектировать собственный сервис',
-  ],
-] as const;
 export function MentorHomeRoute() {
+  const { data } = useSession();
   const [params] = useSearchParams();
   const upcoming = params.get('session') !== 'none';
+  if (!data) return <Navigate to="/login" replace />;
+  if (data.role !== 1) return <h1>Доступ запрещён</h1>;
   return (
     <Preview>
       <h1>Главная наставника</h1>
       <p className="muted">
-        Здравствуйте, Алексей! Вот что происходит с вашим наставничеством.
+        Здравствуйте! Вот что происходит с вашим наставничеством.
       </p>
       <div className="stats">
         {[
           ['Проведено сессий', '32', 'За всё время'],
           ['Подопечных', '3', 'Сейчас занимаются с вами'],
-          ['Новых заявок', '2', 'Ожидают вашего решения'],
+          [
+            'Новых заявок',
+            <MentorApplicationCount key="count" />,
+            'Ожидают вашего решения',
+          ],
         ].map(([label, value, caption]) => (
-          <article className="stats__card" key={label}>
+          <article className="stats__card" key={String(label)}>
             <h2>{label}</h2>
             <strong>{value}</strong>
             <span>{caption}</span>
@@ -224,41 +49,16 @@ export function MentorHomeRoute() {
         ))}
       </div>
       <div className={upcoming ? 'two-columns' : 'preview-stack'}>
-        <section className="preview-stack">
-          <h2>
-            Заявки на наставничество <span className="tag">2 новые</span>
-          </h2>
-          {applicationData.map(([name, tags, goal]) => (
-            <article className="card" key={name}>
-              <div className="row">
-                <h3>{name}</h3>
-                <span className="muted">Сегодня</span>
-              </div>
-              <Tags values={[...tags]} />
-              <p>Цель: {goal}</p>
-              <div className="actions">
-                {['Принять', 'Уточнить', 'Отклонить'].map((label, i) => (
-                  <Button
-                    key={label}
-                    variant={i === 0 ? 'primary' : 'secondary'}
-                    disabled
-                  >
-                    {label}
-                  </Button>
-                ))}
-              </div>
-            </article>
-          ))}
-        </section>
+        <MentorApplications />
         {upcoming && (
           <aside className="preview-stack">
             <h2>Предстоящая сессия</h2>
             <article className="card preview-stack">
-              <Tags values={['3 ноября · вторник']} />
-              <h3>18:00 — 19:00</h3>
+              <p>3 ноября · вторник</p>
+              <h3>18:00–19:00</h3>
               <h3>Екатерина Смирнова</h3>
               <p>Разбор ML-проекта</p>
-              <Tags values={['Онлайн', '60 мин']} />
+              <p>Онлайн · 60 мин</p>
               <Link className="button button--primary" to="/calendar">
                 Открыть календарь
               </Link>

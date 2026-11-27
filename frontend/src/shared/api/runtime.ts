@@ -69,6 +69,60 @@ export const questionnaireSchema = z.object({
 export type Profile = z.infer<typeof profileSchema>;
 export type Session = z.infer<typeof sessionSchema>;
 export type Questionnaire = z.infer<typeof questionnaireSchema>;
+export const mentorQuestionnaireSchema = questionnaireSchema.extend({
+  firstName: z.string().nullable(),
+  lastName: z.string().nullable(),
+  city: z.string().nullable(),
+  education: z.string().nullable(),
+  goalDescription: z.string().nullable(),
+  skills: questionnaireSchema.shape.skills.nullable(),
+  availability: questionnaireSchema.shape.availability.nullable(),
+  teacherInfo: z
+    .object({
+      placeOfWork: z.string().nullable(),
+      position: z.string().nullable(),
+      yearsExperience: z.number(),
+      maxStudents: z.number(),
+    })
+    .nullable()
+    .optional(),
+});
+export type MentorQuestionnaire = z.infer<typeof mentorQuestionnaireSchema>;
+export const applicationSchema = z.object({
+  id: z.uuid(),
+  questionnaireForm: mentorQuestionnaireSchema.nullish(),
+  reasonForRefusal: z.string().nullish(),
+});
+export const curatorApplicationSchema = z.object({
+  id: z.uuid(),
+  studentQuestionnaireForm: mentorQuestionnaireSchema.nullish(),
+  mentorQuestionnaireForm: mentorQuestionnaireSchema.nullish(),
+});
+export const applicationListSchema = z.union([
+  z.array(applicationSchema),
+  z
+    .object({ listApp: z.array(applicationSchema) })
+    .transform((value) => value.listApp),
+]);
+export const curatorApplicationListSchema = z.union([
+  z.array(curatorApplicationSchema),
+  z
+    .object({ listForTutorApp: z.array(curatorApplicationSchema) })
+    .transform((value) => value.listForTutorApp),
+]);
+const applicationDetailSchema = z.object({
+  id: z.uuid(),
+  studentId: z.uuid(),
+  mentorId: z.uuid(),
+});
+export const createdApplicationSchema = z.union([
+  applicationDetailSchema,
+  z
+    .object({ appDetail: applicationDetailSchema })
+    .transform((value) => value.appDetail),
+]);
+export type Application = z.infer<typeof applicationSchema>;
+export type CuratorApplication = z.infer<typeof curatorApplicationSchema>;
 const mentorCardSchema = z.object({
   userId: z.uuid(),
   questionnaireId: z.uuid(),

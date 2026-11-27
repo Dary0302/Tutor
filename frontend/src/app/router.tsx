@@ -20,6 +20,12 @@ export const routeObjects = [
       { path: 'register', element: <RegisterRoute /> },
       { path: 'questionnaire', element: <QuestionnaireRoute /> },
       {
+        path: 'applications',
+        lazy: async () => ({
+          Component: (await import('@/routes/applications')).ApplicationsRoute,
+        }),
+      },
+      {
         path: 'search',
         lazy: async () => ({
           Component: (await import('@/routes/search')).SearchRoute,
@@ -28,13 +34,14 @@ export const routeObjects = [
       {
         path: 'compare',
         lazy: async () => ({
-          Component: (await import('@/routes/demo')).CompareRoute,
+          Component: (await import('@/routes/mentor-details')).CompareRoute,
         }),
       },
       {
         path: 'mentors/:id',
         lazy: async () => ({
-          Component: (await import('@/routes/demo')).MentorProfileRoute,
+          Component: (await import('@/routes/mentor-details'))
+            .MentorProfileRoute,
         }),
       },
       {
@@ -64,7 +71,7 @@ export const routeObjects = [
       {
         path: 'approval-queue',
         lazy: async () => ({
-          Component: (await import('@/routes/role-pages')).ApprovalQueueRoute,
+          Component: (await import('@/routes/applications')).ApprovalQueueRoute,
         }),
       },
       { path: '*', element: <NotFoundRoute /> },
