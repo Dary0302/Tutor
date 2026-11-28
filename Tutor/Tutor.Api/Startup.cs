@@ -3,6 +3,7 @@ using Core.Common.Extensions.Validation;
 using Core.Common.HttpLogic;
 using Microsoft.AspNetCore.Identity;
 using Tutor.Application.Configurations;
+using Tutor.Application.Gamification;
 using Tutor.Authentication;
 using Tutor.Domain.Users;
 using Tutor.Infrastructure.Configurations;
@@ -15,6 +16,7 @@ public class Startup(IConfiguration configuration)
     public void ConfigureServices(IServiceCollection services)
     {
         services
+            .Configure<GamificationOptions>(configuration.GetSection(GamificationOptions.Section))
             .AddInfrastructureServices(configuration)
             .AddApplicationServices()
             .AddCorsPolicy()

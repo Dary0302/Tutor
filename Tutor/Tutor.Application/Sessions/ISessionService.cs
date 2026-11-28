@@ -10,4 +10,5 @@ public interface ISessionService
     Task<Result<IReadOnlyList<SessionParticipantDto>>> GetParticipantsAsync(Guid mentorId, CancellationToken ct);
     Task<Result<SessionDto>> CreateAsync(Guid mentorId, CreateSessionRequest request, CancellationToken ct);
     Task<Result> CancelAsync(Guid mentorId, Guid sessionId, CancellationToken ct);
+    Task<Result> CompleteAsync(Guid mentorId, Guid sessionId, CancellationToken ct);
 }

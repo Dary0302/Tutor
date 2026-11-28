@@ -70,4 +70,21 @@ public sealed class SessionService(ISessionRepository repository, TimeProvider t
         await edit.SaveAsync(ct);
         return Result.Ok();
     }
+
+    public async Task<Result> CompleteAsync(Guid mentorId, Guid sessionId, CancellationToken ct)
+    {
+        await using var edit = await repository.EditSessionAsync(mentorId, sessionId, ct);
+        if (edit is null)
+            return Result.Fail(AppError.NotFound("Сессия не найдена."));
+
+        var session = edit.Session;
+        if (session.Status == SessionStatus.Completed)
+            return Result.Ok();
+        if (session.Status != SessionStatus.Scheduled || session.EndsAt > timeProvider.GetUtcNow())
+            return Result.Fail(AppError.Conflict("Отметить проведённой можно только запланированную сессию после её окончания."));
+
+        session.Status = SessionStatus.Completed;
+        await edit.SaveAsync(ct);
+        return Result.Ok();
+    }
 }

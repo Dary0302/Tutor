@@ -24,3 +24,8 @@ public sealed class CreateSessionRequestValidator : AbstractValidator<CreateSess
         RuleFor(x => x.Agenda).NotEmpty().MaximumLength(255);
     }
 }
+
+public sealed class CompleteSessionRequestValidator : AbstractValidator<CompleteSessionRequest>
+{
+    public CompleteSessionRequestValidator() => RuleFor(x => x.SessionId).NotEmpty();
+}
