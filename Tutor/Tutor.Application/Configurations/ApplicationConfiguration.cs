@@ -8,6 +8,7 @@ using Tutor.Application.Mentors;
 using Tutor.Application.Questionnaires;
 using Tutor.Application.Sessions;
 using Tutor.Domain.Applications;
+using Tutor.Domain.Articles;
 
 namespace Tutor.Application.Configurations;
 
@@ -17,7 +18,7 @@ public static class ApplicationConfiguration
     {
         services.TryAddSingleton(TimeProvider.System);
         return services.AddScoped<AuthService>()
-            .AddScoped<ArticleService>()
+            .AddScoped<IArticleService, ArticleService>()
             .AddScoped<IGoalService, GoalService>()
             .AddScoped<IGoalProgressService, GoalProgressService>()
             .AddScoped<IGoalWorkflowService, GoalWorkflowService>()
