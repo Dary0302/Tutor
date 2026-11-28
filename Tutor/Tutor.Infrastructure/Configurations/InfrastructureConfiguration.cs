@@ -37,9 +37,11 @@ public static class InfrastructureConfiguration
             {
                 ServiceURL = "https://s3.yandexcloud.net",
                 AuthenticationRegion = "ru-central1",
-                ForcePathStyle = false
+                ForcePathStyle = true,
+                Timeout = TimeSpan.FromSeconds(30)
             };
 
+            System.Net.ServicePointManager.Expect100Continue = false;
             var credentials = new BasicAWSCredentials("accessKey", "secretKey");
 
             return new AmazonS3Client(credentials, config);
