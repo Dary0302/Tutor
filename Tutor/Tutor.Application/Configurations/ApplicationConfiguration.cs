@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Tutor.Application.Applications;
 using Tutor.Application.Article;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Tutor.Application.Gamification;
 using Tutor.Application.Goals;
 using Tutor.Application.Auth;
 using Tutor.Application.Mentors;
@@ -19,6 +20,7 @@ public static class ApplicationConfiguration
         return services.AddScoped<AuthService>()
             .AddScoped<ArticleService>()
             .AddScoped<IGoalService, GoalService>()
+            .AddScoped<GamificationService>()
             .AddScoped<IGoalProgressService, GoalProgressService>()
             .AddScoped<IGoalWorkflowService, GoalWorkflowService>()
             .AddScoped<IQuestionnaireService, QuestionnaireService>()

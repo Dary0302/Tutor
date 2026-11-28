@@ -17,6 +17,11 @@ public sealed class CreateSessionRequest
     public required string Agenda { get; init; }
 }
 
+public sealed class CompleteSessionRequest
+{
+    public Guid SessionId { get; init; }
+}
+
 public sealed record SessionDto(Guid Id, Guid PairId, DateTimeOffset StartsAt, DateTimeOffset EndsAt,
     string Agenda, [property: JsonConverter(typeof(JsonStringEnumConverter<SessionStatus>))] SessionStatus Status,
     string? PartnerName);

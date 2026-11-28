@@ -4,6 +4,7 @@ using Tutor.Application.Sessions;
 using Tutor.Domain.Mentorship;
 using Tutor.Domain.Questionnaires;
 using Tutor.Domain.Users;
+using Tutor.Infrastructure.Repositories.Writers;
 
 namespace Tutor.Infrastructure.Repositories;
 
@@ -110,18 +111,11 @@ internal sealed class SessionRepository(IDbContextFactory<TutorDbContext> factor
                 return null;
 
             transaction = await db.Database.BeginTransactionAsync(ct);
-            var locked = await db.Set<MentoringSession>()
+            var session = await db.Set<MentoringSession>()
                 .FromSql($"SELECT * FROM sessions WHERE id = {visibleSessionId.Value} FOR UPDATE")
-                .SingleOrDefaultAsync(ct);
-            if (locked is null)
-                return null;
-
-            var session = await (from item in db.Set<MentoringSession>().AsTracking()
-                                 join pair in VisiblePairs(db, mentorId, UserRole.Mentor)
-                                     on item.PairId equals pair.Id
-                                 where item.Id == visibleSessionId.Value
-                                 select item).SingleOrDefaultAsync(ct);
-            if (session is null)
+                .AsTracking().SingleOrDefaultAsync(ct);
+            if (session is null || !await VisiblePairs(db, mentorId, UserRole.Mentor)
+                    .AnyAsync(pair => pair.Id == session.PairId, ct))
                 return null;
 
             var repository = new SessionWriteRepository(db, transaction, session);
@@ -148,37 +142,4 @@ internal sealed class SessionRepository(IDbContextFactory<TutorDbContext> factor
             (role == UserRole.Mentor ? pair.Request.TeacherId == userId : pair.Request.StudentId == userId) &&
             db.Users.Any(user => user.Id == pair.Request.StudentId) &&
             db.Users.Any(user => user.Id == pair.Request.TeacherId));
-
-    private sealed class SessionPairWriteRepository(TutorDbContext db, IDbContextTransaction transaction,
-        SessionPairContext pair) : ISessionPairWriteRepository
-    {
-        public SessionPairContext Pair { get; } = pair;
-        public void Add(MentoringSession session) => db.Add(session);
-        public async Task SaveAsync(CancellationToken ct)
-        {
-            await db.SaveChangesAsync(ct);
-            await transaction.CommitAsync(ct);
-        }
-        public async ValueTask DisposeAsync()
-        {
-            try { await transaction.DisposeAsync(); }
-            finally { await db.DisposeAsync(); }
-        }
-    }
-
-    private sealed class SessionWriteRepository(TutorDbContext db, IDbContextTransaction transaction,
-        MentoringSession session) : ISessionWriteRepository
-    {
-        public MentoringSession Session { get; } = session;
-        public async Task SaveAsync(CancellationToken ct)
-        {
-            await db.SaveChangesAsync(ct);
-            await transaction.CommitAsync(ct);
-        }
-        public async ValueTask DisposeAsync()
-        {
-            try { await transaction.DisposeAsync(); }
-            finally { await db.DisposeAsync(); }
-        }
-    }
 }

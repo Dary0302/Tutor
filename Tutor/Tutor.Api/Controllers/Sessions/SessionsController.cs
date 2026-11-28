@@ -35,4 +35,10 @@ public sealed class SessionsController(ISessionService service) : TutorControlle
     [Authorize(Roles = nameof(UserRole.Mentor))]
     public async Task<IActionResult> Cancel(Guid sessionId, CancellationToken ct) =>
         (await service.CancelAsync(GetIdAuthorizedUser(), sessionId, ct)).ToActionResult();
+
+    [HttpPost("{SessionId:guid}/complete")]
+    [Authorize(Roles = nameof(UserRole.Mentor))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Complete([FromRoute] CompleteSessionRequest request, CancellationToken ct) =>
+        (await service.CompleteAsync(GetIdAuthorizedUser(), request.SessionId, ct)).ToActionResult();
 }
