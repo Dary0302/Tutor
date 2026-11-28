@@ -35,7 +35,7 @@ public static class InfrastructureConfiguration
         {
             var config = new AmazonS3Config
             {
-                ServiceURL = "https://s3.yandexcloud.net",
+                ServiceURL = "https://storage.yandexcloud.net",
                 AuthenticationRegion = "ru-central1",
                 ForcePathStyle = false
             };
