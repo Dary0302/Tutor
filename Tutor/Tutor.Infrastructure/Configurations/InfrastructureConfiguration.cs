@@ -37,7 +37,7 @@ public static class InfrastructureConfiguration
             {
                 ServiceURL = "https://s3.yandexcloud.net",
                 AuthenticationRegion = "ru-central1",
-                ForcePathStyle = true
+                ForcePathStyle = false
             };
 
             var credentials = new BasicAWSCredentials("accessKey", "secretKey");
